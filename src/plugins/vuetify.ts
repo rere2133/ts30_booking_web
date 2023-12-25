@@ -43,6 +43,13 @@ const vuetify = createVuetify({
     themes: {
       myCustomLightTheme,
     },
+  },
+  defaults:{
+    VAppBar:{
+      VBtn:{
+        color: 'primary'
+      }
+    }
   }
 })
 
