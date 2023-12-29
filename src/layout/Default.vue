@@ -2,7 +2,12 @@
   <v-app>
     <v-app-bar class="tw-px-[80px] tw-py-6" flat color="transparent">
       <template #title>
-        <v-img max-width="200" :src="img_host + '/logo.png'"></v-img>
+        <v-img
+          max-width="200"
+          class="tw-cursor-pointer"
+          :src="img_host + '/logo.png'"
+          @click="router.push('/')"
+        ></v-img>
       </template>
       <template #append>
         <router-link to="/rooms" class="mr-8 tw-text-md tw-font-bold"
@@ -34,6 +39,8 @@
 
 <script setup lang="ts">
 import { img_host } from "@/utils/imageSource";
+import { useRouter } from "vue-router";
+const router = useRouter();
 </script>
 
 <style scoped></style>
