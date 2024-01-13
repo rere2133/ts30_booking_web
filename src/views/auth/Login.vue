@@ -11,34 +11,26 @@
           <div class="tw-flex tw-flex-col tw-gap-4">
             <!-- 電子信箱和密碼部分 -->
             <div class="tw-flex tw-flex-col tw-gap-2">
-              <div class="tw-flex tw-items-center">
-                <div class="tw-flex-1 tw-text-white tw-text-sm tw-font-bold">電子信箱</div>
-              </div>
-              <div class="tw-flex tw-items-center tw-p-4 tw-bg-white tw-rounded tw-border tw-border-[#ececec]">
-                <div class="tw-flex-1 tw-text-[#909090] tw-text-sm">hello@exsample.com</div>
-              </div>
+              <label for="" class="tw-text-white tw-text-sm tw-font-bold">電子信箱</label>
+              <input type="email" placeholder="hello@exsample.com" class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border" />
             </div>
             <div class="tw-flex tw-flex-col tw-gap-2">
-              <div class="tw-flex tw-items-center">
-                <div class="tw-flex-1 tw-text-white tw-text-sm tw-font-bold">密碼</div>
-              </div>
-              <div class="tw-flex tw-items-center tw-p-4 tw-bg-white tw-rounded tw-border tw-border-[#ececec]">
-                <div class="tw-flex-1 tw-text-[#909090] tw-text-sm">請輸入密碼</div>
-              </div>
+              <label for="" class="tw-text-white tw-text-sm tw-font-bold">密碼</label>
+              <input type="password" placeholder="請輸入密碼" class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border" />
             </div>
             <div class="tw-flex">
               <div class="tw-flex-1 tw-flex tw-items-center tw-gap-2">
-                <div class="tw-w-6 tw-h-6 tw-relative tw-bg-white tw-rounded tw-border tw-border-gray-400"></div>
-                <div class="tw-flex-1 tw-text-white tw-text-sm tw-font-bold">記住帳號</div>
+                <input type="checkbox" class="tw-w-6 tw-h-6" />
+                <label for="" class="tw-text-white tw-text-sm tw-font-bold">記住帳號</label>
               </div>
               <div class="tw-flex tw-justify-center tw-items-center">
-                <div class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline">忘記密碼？</div>
+                <a href="#" class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline">忘記密碼？</a>
               </div>
             </div>
             <!-- 其他元素 -->
           </div>
-          <div class="tw-flex-1 tw-flex tw-justify-center tw-items-center tw-p-4 tw-bg-gray-200 tw-rounded">
-            <div class="tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold">會員登入</div>
+          <div class="tw-flex-1 tw-flex tw-justify-center tw-items-center tw-bg-gray-200 tw-rounded">
+            <button class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full">會員登入</button>
           </div>
           <div class="tw-flex-1 tw-flex tw-justify-start tw-items-center tw-gap-2">
             <div class="tw-text-white tw-text-sm">沒有會員嗎？</div>
