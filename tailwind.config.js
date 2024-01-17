@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import { img_desktop_host } from "./src/utils/imageSource";
 export default {
   content: [
     "./index.html",
@@ -49,6 +50,10 @@ export default {
           10: '#F9F9F9',
         },
       },
+      backgroundImage: {
+        'member-hero': `url("${img_desktop_host}/hero.png")`,
+        'desktop-bottom-line': `url("@/assets/svg/desktop_bottom_line.svg")`,
+      }
     },
   },
   plugins: [],
