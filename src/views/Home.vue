@@ -12,7 +12,7 @@
       <div class="tw-flex">
         <div class="tw-flex-1">
           <div
-            class="tw-text-4xl tw-font-bold tw-tracking-wider gradient tw-inline-block tw-text-transparent tw-bg-clip-text"
+            class="tw-text-4xl tw-font-bold tw-tracking-wider tw-text-primary-100 tw-inline-block tw-text-transparent tw-bg-clip-text"
           >
             享樂酒店<br />
             <span class="tw-text-2xl">Enjoyment Luxury Hotel</span>

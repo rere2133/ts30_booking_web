@@ -5,7 +5,7 @@
         <v-img
           max-width="200"
           class="tw-cursor-pointer"
-          :src="img_host + '/logo.png'"
+          :src="getImageUrl('logo.png')"
           @click="router.push('/')"
         ></v-img>
       </template>
@@ -38,9 +38,10 @@
 </template>
 
 <script setup lang="ts">
-import { img_host } from "@/utils/imageSource";
 import { useRouter } from "vue-router";
+import { useHelper } from "@/utils/useHelper";
 const router = useRouter();
+const { getImageUrl } = useHelper();
 </script>
 
 <style scoped></style>
