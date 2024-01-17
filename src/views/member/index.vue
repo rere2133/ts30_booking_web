@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="tw-max-w-[1280px] tw-mx-auto tw-mt-[40px] md:tw-mt-[80px] tw-mb-[40px] md:tw-mb-[120px]" >
-      <section-tab :sectionList="sectionList" :activeItemValue="activeItemValue" @change="emitSectionTabChange"></section-tab>
+      <section-tab class="tw-mb-[40px] md:tw-mb-[80px]" :sectionList="sectionList" :activeItemValue="activeItemValue" @change="emitSectionTabChange"></section-tab>
       <router-view></router-view>
     </div>
     <div class="tw-overflow-hidden tw-bg-desktop-bottom-line tw-h-[187px]">
