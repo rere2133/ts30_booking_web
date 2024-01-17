@@ -32,7 +32,24 @@ const routes = [
         component: () => import('@/views/BookSucceed.vue'),
       },
       {
-        path: 'member',
+        path: 'login',
+        name: 'Login',
+        component: () => import('@/views/auth/Login.vue'),
+      },
+      {
+        path: 'signup',
+        name: 'Signup',
+        component: () => import('@/views/auth/Signup.vue'),
+      },
+    ]
+  },
+  {
+    path: '/member',
+    name: 'MemberLayout',
+    component: () => import('@/layout/Member.vue'),
+    children: [
+      {
+        path: '',
         name: 'Member',
         component: () => import('@/views/member/index.vue'),
         children:[
@@ -48,19 +65,8 @@ const routes = [
           },
         ]
       },
-      {
-        path: 'login',
-        name: 'Login',
-        component: () => import('@/views/auth/Login.vue'),
-      },
-      {
-        path: 'signup',
-        name: 'Signup',
-        component: () => import('@/views/auth/Signup.vue'),
-      },
     ]
-  },
-  
+  }
 ]
 
 const router = createRouter({
