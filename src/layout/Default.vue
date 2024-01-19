@@ -23,15 +23,7 @@
         </div>
       </template>
     </v-app-bar>
-    <v-main
-      class="tw-max-w-[1280px]"
-      style="
-        --v-layout-left: 100px;
-        --v-layout-right: 100px;
-        --v-layout-top: 120px;
-        --v-layout-bottom: 80px;
-      "
-    >
+    <v-main class="tw-max-w-[1280px] mainContainer">
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -43,4 +35,17 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.mainContainer {
+  --v-layout-left: 100px !important;
+  --v-layout-right: 100px !important;
+  --v-layout-top: 120px !important;
+  --v-layout-bottom: 80px !important;
+  @media (max-width: 1280px) {
+    --v-layout-left: 24px !important;
+    --v-layout-right: 24px !important;
+    --v-layout-top: 80px !important;
+    --v-layout-bottom: 50px !important;
+  }
+}
+</style>
