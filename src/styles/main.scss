@@ -18,67 +18,86 @@
 //   -moz-osx-font-smoothing: grayscale;
 }
 
-// a {
-//   font-weight: 500;
-//   color: #646cff;
-//   text-decoration: inherit;
-// }
-// a:hover {
-//   color: #535bf2;
-// }
+/* 標題 */
+.tw-text-display {
+  font-size: 90px;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 5px;
+}
+.tw-text-h1 {
+  font-size: 3rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 2.4px;
+}
 
-// body {
-//   margin: 0;
-//   display: flex;
-//   place-items: center;
-//   min-width: 320px;
-//   min-height: 100vh;
-// }
+.tw-text-h2 {
+  font-size: 2.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
 
-// h1 {
-//   font-size: 3.2em;
-//   line-height: 1.1;
-// }
+.tw-text-h3 {
+  font-size: 2rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+}
 
-// button {
-//   border-radius: 8px;
-//   border: 1px solid transparent;
-//   padding: 0.6em 1.2em;
-//   font-size: 1em;
-//   font-weight: 500;
-//   font-family: inherit;
-//   background-color: #1a1a1a;
-//   cursor: pointer;
-//   transition: border-color 0.25s;
-// }
-// button:hover {
-//   border-color: #646cff;
-// }
-// button:focus,
-// button:focus-visible {
-//   outline: 4px auto -webkit-focus-ring-color;
-// }
+.tw-text-h4 {
+  font-size: 1.75rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 1.4px;
+}
 
-// .card {
-//   padding: 2em;
-// }
+.tw-text-h5 {
+  font-size: 1.5rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
 
-// #app {
-//   max-width: 1280px;
-//   margin: 0 auto;
-//   padding: 2rem;
-//   text-align: center;
-// }
+.tw-text-h6 {
+  font-size: 1.25rem;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
 
-// @media (prefers-color-scheme: light) {
-//   :root {
-//     color: #213547;
-//     background-color: #ffffff;
-//   }
-//   a:hover {
-//     color: #747bff;
-//   }
-//   button {
-//     background-color: #f9f9f9;
-//   }
-// }
+.tw-text-title {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.32px;
+}
+
+.tw-text-subTitle {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-weight: 700;
+  letter-spacing: 0.28px;
+}
+
+.tw-text-body {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0.32px;
+}
+
+.tw-text-body2 {
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0.28px;
+}
+
+.tw-text-tiny {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0.24px;
+}  
