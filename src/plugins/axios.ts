@@ -21,7 +21,7 @@ let setAxios = (token: string | null) => {
       })
     },
     err => {
-      if (router) {
+      if (router && err.response.status == '401') {
         router.push({
           name: 'Home'
         })
