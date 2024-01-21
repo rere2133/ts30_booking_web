@@ -1,6 +1,6 @@
 <template>
   <div class="tw-h-screen tw-flex tw-overflow-hidden">
-    <div class="tw-w-1/2 tw-bg-cover tw-bg-center" :style="`background-image: url(${img_host}/register.png);`"></div>
+    <div class="tw-w-1/2 tw-bg-cover tw-bg-center" :style="`background-image: url(${getImageUrl('register.png')});`"></div>
     <div class="tw-w-1/2 tw-flex tw-flex-col tw-justify-center">
       <div id="login-area" class="tw-w-[416px] mx-auto">
         <form class="tw-flex tw-flex-col tw-gap-10" @submit.prevent="login">
@@ -57,6 +57,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { img_host } from "@/utils/imageSource";
+import { useHelper } from "@/utils/useHelper";
+const { getImageUrl } = useHelper();
 
 const userInfo = ref({ email: "", password: "" });
 const rememberMe = ref(false);

@@ -5,7 +5,7 @@
         <v-img
           max-width="200"
           class="tw-cursor-pointer"
-          :src="img_host + '/logo.png'"
+          :src="getImageUrl('logo.png')"
           @click="router.push('/')"
         ></v-img>
       </template>
@@ -23,24 +23,32 @@
         </div>
       </template>
     </v-app-bar>
-    <v-main
-      class="tw-max-w-[1280px]"
-      style="
-        --v-layout-left: 100px;
-        --v-layout-right: 100px;
-        --v-layout-top: 120px;
-        --v-layout-bottom: 80px;
-      "
-    >
-      <router-view></router-view>
+    <v-main>
+      <div class="tw-max-w-[1280px] mx-auto">
+        <router-view></router-view>
+      </div>
     </v-main>
   </v-app>
 </template>
 
 <script setup lang="ts">
-import { img_host } from "@/utils/imageSource";
 import { useRouter } from "vue-router";
+import { useHelper } from "@/utils/useHelper";
 const router = useRouter();
+const { getImageUrl } = useHelper();
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.mainContainer {
+  --v-layout-left: 100px !important;
+  --v-layout-right: 100px !important;
+  --v-layout-top: 120px !important;
+  --v-layout-bottom: 80px !important;
+  @media (max-width: 1280px) {
+    --v-layout-left: 24px !important;
+    --v-layout-right: 24px !important;
+    --v-layout-top: 80px !important;
+    --v-layout-bottom: 50px !important;
+  }
+}
+</style>
