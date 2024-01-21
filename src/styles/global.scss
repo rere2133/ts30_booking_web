@@ -13,4 +13,10 @@
   @media (max-width: 600px) {
     max-width: 400px;
   };
+  @media (max-width: 400px) {
+    max-width: 320px;
+  };
+}
+.textGradient {
+  @apply tw-bg-gradient-to-r tw-from-primary-100 tw-to-[#fff];
 }

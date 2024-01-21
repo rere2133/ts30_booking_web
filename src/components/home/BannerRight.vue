@@ -13,6 +13,7 @@
         我們致力於為您提供無與倫比的奢華體驗與優質服務
       </div>
       <div
+        @click="router.push('/rooms')"
         class="tw-group tw-flex tw-items-center tw-bg-white tw-text-black-100 tw-text-right tw-w-[97%] tw-p-6 tw-rounded-lg hover:tw-bg-primary-100 hover:tw-text-white tw-cursor-pointer"
       >
         <div class="tw-basis-4/5 tw-h-[1px]"></div>
@@ -28,7 +29,10 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRouter } from "vue-router";
+const router = useRouter();
+</script>
 
 <style scoped lang="scss">
 .bannerRightBg {

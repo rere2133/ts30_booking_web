@@ -50,7 +50,8 @@ const vuetify = createVuetify({
         color: 'primary'
       }
     }
-  }
+  },
+  
 })
 
 export default vuetify

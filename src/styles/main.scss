@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import './mixins.scss';
 @import './header.scss';
 @import './global.scss';
 
