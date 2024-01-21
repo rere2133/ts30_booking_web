@@ -1,5 +1,5 @@
 <template>
-  <div>Rooms</div>
+  <div>Member Profile Page</div>
 </template>
 
 <script setup lang="ts"></script>
