@@ -23,8 +23,10 @@
         </div>
       </template>
     </v-app-bar>
-    <v-main class="tw-max-w-[1280px] mainContainer mx-auto">
-      <router-view></router-view>
+    <v-main>
+      <div class="tw-max-w-[1280px] mx-auto">
+        <router-view></router-view>
+      </div>
     </v-main>
   </v-app>
 </template>

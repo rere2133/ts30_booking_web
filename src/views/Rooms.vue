@@ -1,17 +1,15 @@
 <template>
   <div>
-    <div class="tw-h-screen tw-w-screen tw-absolute tw-top-0 tw-left-0 tw-z-0">
-      <img
-        class="tw-w-full tw-brightness-50 tw-object-top"
-        :src="getImageUrl('banner.png')"
-      />
-    </div>
+    <Banner justify="tw-justify-center">
+      <template #bannerRight>
+        <div class="tw-relative tw-text-h1 tw-self-center">客房旅宿</div>
+      </template>
+    </Banner>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useHelper } from "@/utils/useHelper";
-const { getImageUrl } = useHelper();
+import Banner from "@/components/Banner.vue";
 </script>
 
 <style scoped></style>

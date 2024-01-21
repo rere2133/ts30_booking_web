@@ -1,0 +1,61 @@
+<template>
+  <div>
+    <div
+      class="tw-h-screen tw-w-screen tw-absolute tw-top-0 tw-left-0 tw-brightness-[.30] tw-z-0"
+    >
+      <v-img
+        class="banner"
+        height="100vh"
+        cover
+        :src="getImageUrl('banner.png')"
+      ></v-img>
+    </div>
+    <div
+      class="container tw-pt-[40px] tw-max-h-screen tw-flex tw-flex-wrap tw-gap-8 tw-w-full tw-h-[75vh] lg:tw-h-[90vh] lg:tw-flex-nowrap"
+      :class="$attrs.justify || 'tw-justify-between'"
+    >
+      <!-- <div class="tw-flex tw-flex-wrap tw-items-center tw-relative tw-h-[600px]"> -->
+      <div
+        class="tw-w-full tw-flex tw-flex-col tw-justify-center tw-items-center tw-text-center tw-relative tw-z-10 lg:tw-w-[40%] lg:tw-items-start lg:tw-text-left"
+      >
+        <div
+          class="tw-text-h4 lg:tw-text-h2 tw-font-bold tw-tracking-wider gradient tw-inline-block tw-text-transparent tw-bg-clip-text"
+        >
+          享樂酒店<br />
+          <span class="tw-text-title lg:tw-text-h5"
+            >Enjoyment Luxury Hotel</span
+          >
+        </div>
+        <hr
+          class="tw-mt-4 gradient bannerDivider tw-border-0 tw-h-[1px] tw-w-5/6"
+        />
+      </div>
+      <!-- To show the element remind to add 'tw-relative' class at the first layer of bannerRight -->
+      <slot name="bannerRight" />
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { useHelper } from "@/utils/useHelper";
+const { getImageUrl } = useHelper();
+</script>
+
+<style scoped lang="scss">
+.gradient {
+  @apply tw-bg-gradient-to-r tw-from-primary-100 tw-to-[#fff];
+}
+.bannerDivider {
+  display: block;
+  @media (max-width: 1279px) {
+    transform: rotate(90deg);
+    width: 100px;
+    margin: 80px 0 60px;
+  }
+}
+.banner {
+  &:deep(.v-img__img) {
+    object-position: top;
+  }
+}
+</style>

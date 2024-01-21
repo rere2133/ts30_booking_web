@@ -1,0 +1,86 @@
+/* 標題 */
+@layer components{
+  .tw-text-display {
+    font-size: 60px;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 5px;
+  }
+  .tw-text-h1 {
+    font-size: 3rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 2.4px;
+  }
+  
+  .tw-text-h2 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 2px;
+  }
+  
+  .tw-text-h3 {
+    font-size: 2rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 1.6px;
+  }
+  
+  .tw-text-h4 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+  }
+  
+  .tw-text-h5 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+  }
+  
+  .tw-text-h6 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  
+  .tw-text-title {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 700;
+    letter-spacing: 0.32px;
+  }
+  
+  .tw-text-subTitle {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 700;
+    letter-spacing: 0.28px;
+  }
+  
+  .tw-text-body {
+    font-size: 1rem;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0.32px;
+  }
+  
+  .tw-text-body2 {
+    font-size: 0.875rem;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0.28px;
+  }
+  
+  .tw-text-tiny {
+    font-size: 0.75rem;
+    line-height: 1.5;
+    font-weight: 500;
+    letter-spacing: 0.24px;
+  }  
+}
+
