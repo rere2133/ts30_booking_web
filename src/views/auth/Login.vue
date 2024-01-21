@@ -32,18 +32,24 @@
             <div class="tw-flex">
               <div class="tw-flex-1 tw-flex tw-items-center tw-gap-2">
                 <input type="checkbox" class="tw-w-6 tw-h-6" id="remember" v-model="rememberMe" />
-                <label for="" class="tw-text-white tw-text-sm tw-font-bold">記住帳號</label>
+                <label for="remember" class="tw-text-white tw-text-sm tw-font-bold">記住帳號</label>
               </div>
               <div class="tw-flex tw-justify-center tw-items-center">
                 <a href="#" class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline">忘記密碼？</a>
               </div>
             </div>
           </div>
-          <div class="tw-flex-1 tw-flex tw-justify-center tw-items-center tw-bg-gray-200 tw-rounded">
-            <button type="submit" id="login" class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full">
-              會員登入
-            </button>
+          <div>
+            <div v-if="loginError" class="tw-text-red-500 tw-text-center tw-mb-2">
+              {{ loginError }}
+            </div>
+            <div class="tw-flex-1 tw-flex tw-justify-center tw-items-center tw-bg-gray-200 tw-rounded">
+              <button type="submit" id="login" class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full">
+                會員登入
+              </button>
+            </div>
           </div>
+
           <div class="tw-flex-1 tw-flex tw-justify-start tw-items-center tw-gap-2">
             <div class="tw-text-white tw-text-sm">沒有會員嗎？</div>
             <div class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline">前往註冊</div>
@@ -56,12 +62,15 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { img_host } from "@/utils/imageSource";
+import axios from "axios";
+import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
 const { getImageUrl } = useHelper();
+const router = useRouter();
 
 const userInfo = ref({ email: "", password: "" });
 const rememberMe = ref(false);
+const loginError = ref("");
 
 type AccountData = {
   email: string;
@@ -79,23 +88,36 @@ onMounted(() => {
   }
 });
 
-function checkAccount(data: AccountData) {
-  return validEmail(data.email) && validPassword(data.password);
-}
-
 async function login() {
   if (!checkAccount(userInfo.value)) return;
-  console.log("check point login", userInfo, userInfo.value);
+  loginError.value = "";
 
-  if (rememberMe.value) {
-    localStorage.setItem("email", userInfo.value.email);
-    localStorage.setItem("password", userInfo.value.password);
-    console.log("check point rememberMe true", localStorage.getItem("email"));
-  } else {
-    localStorage.removeItem("email");
-    localStorage.removeItem("password");
-    console.log("check point rememberMe false", localStorage.getItem("email"));
+  try {
+    const response = await axios.post("https://hotel-reservation-backend-sgtq.onrender.com/api/v1/user/login", {
+      email: userInfo.value.email,
+      password: userInfo.value.password,
+    });
+    localStorage.setItem("auth_token", response.data.data.accessToken);
+
+    if (rememberMe.value) {
+      localStorage.setItem("email", userInfo.value.email);
+      localStorage.setItem("password", userInfo.value.password);
+    } else {
+      localStorage.removeItem("email");
+      localStorage.removeItem("password");
+    }
+    router.push("/"); // 登入成功後導向首頁
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      loginError.value = error.response.data.message;
+    } else {
+      loginError.value = "登入失敗，請稍後再試。";
+    }
   }
+}
+
+function checkAccount(data: AccountData) {
+  return validEmail(data.email) && validPassword(data.password);
 }
 
 function validEmail(mail: string) {
