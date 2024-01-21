@@ -48,6 +48,7 @@ export default {
           60: '#909090',
           40: '#ECECEC',
           10: '#F9F9F9',
+          bg: '#140F0A'
         },
       },
       backgroundImage: {

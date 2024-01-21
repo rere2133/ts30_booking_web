@@ -6,6 +6,7 @@
       </template>
     </Banner>
     <NewInfo />
+    <About />
   </div>
 </template>
 
@@ -13,6 +14,7 @@
 import Banner from "@/components/Banner.vue";
 import BannerRight from "@/components/home/BannerRight.vue";
 import NewInfo from "@/components/home/NewInfo.vue";
+import About from "@/components/home/About.vue";
 </script>
 
 <style scoped lang="scss"></style>

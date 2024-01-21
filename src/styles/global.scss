@@ -20,3 +20,6 @@
 .textGradient {
   @apply tw-bg-gradient-to-r tw-from-primary-100 tw-to-[#fff];
 }
+.gb-divider {
+  @apply tw-border-0 tw-h-[1px];
+}

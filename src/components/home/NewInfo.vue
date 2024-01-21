@@ -9,7 +9,7 @@
             最新<br />
             消息
           </h2>
-          <hr class="textGradient tw-mt-4 tw-border-0 tw-h-[1px] tw-w-full" />
+          <hr class="gb-divider textGradient tw-mt-4 tw-w-full" />
         </v-col>
         <v-col cols="12" lg="10">
           <NewInfoPlan

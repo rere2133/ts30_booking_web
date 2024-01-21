@@ -24,9 +24,7 @@
             >Enjoyment Luxury Hotel</span
           >
         </div>
-        <hr
-          class="tw-mt-4 textGradient bannerDivider tw-border-0 tw-h-[1px] tw-w-5/6"
-        />
+        <hr class="tw-mt-4 textGradient bannerDivider gb-divider tw-w-5/6" />
       </div>
       <!-- To show the element remind to add 'tw-relative' class at the first layer of bannerRight -->
       <slot name="bannerRight" />
