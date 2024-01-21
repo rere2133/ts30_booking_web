@@ -7,7 +7,7 @@
         class="banner"
         height="100vh"
         cover
-        :src="`${img_host}/banner.png`"
+        :src="getImageUrl('banner.png')"
       ></v-img>
     </div>
     <div class="tw-flex tw-flex-wrap tw-items-center tw-relative tw-h-[600px]">
@@ -54,7 +54,8 @@
 </template>
 
 <script setup lang="ts">
-import { img_host } from "@/utils/imageSource";
+import { useHelper } from "@/utils/useHelper";
+const { getImageUrl } = useHelper();
 </script>
 
 <style scoped lang="scss">
