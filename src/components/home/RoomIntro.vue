@@ -20,7 +20,7 @@
       </v-col>
       <v-col cols="12" lg="6">
         <div
-          class="lg:tw-mt-[50%] tw-pl-10 tw-w-[75%] tw-max-w-[560px] tw-relative tw-z-10"
+          class="lg:tw-mt-[50%] tw-pl-10 tw-w-[90%] lg:tw-w-[75%] tw-max-w-[560px] tw-relative tw-z-10"
         >
           <h2 class="tw-text-h2 tw-mb-4">尊爵雙人房</h2>
           <p>
