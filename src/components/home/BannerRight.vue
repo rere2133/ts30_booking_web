@@ -15,7 +15,7 @@
       <BtnWithLine to="/rooms" text="立即訂房" width="97%" />
     </div>
     <div
-      class="tw-absolute tw-w-[90%] tw-h-[50vh] tw-max-h-[70vh] tw-max-w-full tw-top-[50%] tw-right-0 tw-translate-y-[-50%] tw-rounded-[40px] tw-border-t tw-border-r tw-border-[#fff6] lg:tw-h-full lg:tw-right-[-20px] lg:tw-w-[40vw]lg:tw-rounded-[80px] bannerRightBg"
+      class="tw-absolute tw-w-[90%] tw-h-[50vh] tw-max-h-[70vh] tw-max-w-full tw-top-[50%] tw-right-0 tw-translate-y-[-50%] tw-rounded-[40px] tw-border-t tw-border-r tw-border-[#fff6] lg:tw-h-full lg:tw-mr-10 lg:tw-w-[40vw] lg:tw-rounded-[80px] bannerRightBg"
     ></div>
   </div>
 </template>

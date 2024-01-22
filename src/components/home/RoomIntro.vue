@@ -1,16 +1,26 @@
 <template>
-  <HomeContainer class="tw-bg-blackbg tw-relative">
-    <v-row>
-      <v-col cols="12" lg="6" class="tw-py-[100px]">
+  <HomeContainer class="tw-bg-blackbg tw-relative tw-overflow-hidden">
+    <v-row class="tw-items-center">
+      <v-col cols="12" lg="6">
+        <img
+          class="bgDecImg d-block d-lg-none"
+          style="--left: 30%; --min-width: 300%"
+          :src="getImageUrl('line2.png')"
+        />
         <div
-          class="tw-relative tw-z-10 tw-max-h-[900px] tw-rounded-r-lg tw-overflow-hidden"
+          class="tw-pt-[20%] tw-relative tw-z-10 tw-max-h-[900px] tw-rounded-r-lg tw-overflow-hidden lg:tw-py-[10%]"
         >
           <img :src="getImageUrl('room1.png')" />
         </div>
+        <img
+          class="bgDecImg d-block d-lg-none"
+          style="--top: 60%"
+          :src="getImageUrl('bg.png')"
+        />
       </v-col>
       <v-col cols="12" lg="6">
         <div
-          class="tw-mt-[70%] tw-pl-10 tw-w-[75%] tw-max-w-[560px] tw-relative tw-z-10"
+          class="lg:tw-mt-[50%] tw-pl-10 tw-w-[75%] tw-max-w-[560px] tw-relative tw-z-10"
         >
           <h2 class="tw-text-h2 tw-mb-4">尊爵雙人房</h2>
           <p>
@@ -21,7 +31,7 @@
         </div>
         <img
           class="bgDecImg"
-          style="--top: 15%"
+          style="--top: 20%"
           :src="getImageUrl('line2.png')"
         />
         <img class="bgDecImg" style="--top: 40%" :src="getImageUrl('bg.png')" />
@@ -40,11 +50,16 @@ const { getImageUrl } = useHelper();
 
 <style scoped lang="scss">
 .bgDecImg {
+  --top: 0%;
+  --left: 0%;
+  --min-width: 100%;
   position: absolute;
   top: var(--top);
-  left: 0;
+  left: var(--left);
   z-index: 0;
-  width: 100%;
+  width: var(--min-width);
+  min-width: var(--min-width);
+
   object-fit: cover;
 }
 </style>
