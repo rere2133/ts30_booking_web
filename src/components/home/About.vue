@@ -1,5 +1,5 @@
 <template>
-  <HomeContainer class="tw-bg-blackbg tw-relative tw-mt-16">
+  <HomeContainer class="tw-bg-blackbg tw-relative tw-mt-16 tw-min-h-[800px]">
     <div class="tw-w-full tw-absolute tw-top-10 tw-h-[600px]">
       <img :src="getImageUrl('about.png')" />
     </div>
