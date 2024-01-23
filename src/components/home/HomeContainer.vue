@@ -7,7 +7,7 @@
 <script setup lang="ts"></script>
 
 <style scoped>
-@import "@/styles/mixins.scss";
+@import "@/styles/main.scss";
 .center {
   @include center($h: "fit-content");
 }

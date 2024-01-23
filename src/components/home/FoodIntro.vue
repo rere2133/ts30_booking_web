@@ -18,7 +18,7 @@
           <hr class="gb-divider textGradient tw-mt-4 tw-w-full" />
         </div>
         <div
-          class="tw-flex tw-overflow-x-scroll tw-pb-4 tw-mr-4 tw-w-full lg:tw-w-[84vw] scrollBar"
+          class="tw-flex tw-overflow-x-scroll tw-pb-4 tw-mr-4 tw-w-full lg:tw-w-[84vw]"
         >
           <FoodCard
             v-for="food in homeData.food"
@@ -47,10 +47,4 @@ import { homeData } from "@/utils/homeData";
 const { getImageUrl } = useHelper();
 </script>
 
-<style scoped>
-.scrollBar {
-  ::-webkit-scrollbar {
-    height: 5px;
-  }
-}
-</style>
+<style scoped></style>

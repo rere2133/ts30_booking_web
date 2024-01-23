@@ -106,7 +106,7 @@ const toPage = (path: string) => {
 </script>
 
 <style scoped lang="scss">
-@import "@/styles/mixins.scss";
+@import "@/styles/main.scss";
 .overlay {
   position: fixed;
   top: 0;

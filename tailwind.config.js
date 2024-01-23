@@ -59,9 +59,17 @@ export default {
         'food3': `url("/imgs/web/food3.png")`,
         'food4': `url("/imgs/web/food4.png")`,
         'food5': `url("/imgs/web/food5.png")`,
-      }
+      },
+
     },
   },
   plugins: [],
+  safelist: [
+    'tw-bg-food1',
+    'tw-bg-food2',
+    'tw-bg-food3',
+    'tw-bg-food4',
+    'tw-bg-food5',
+  ]
 }
 
