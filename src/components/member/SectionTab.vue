@@ -6,13 +6,8 @@
     </li>
   </ul>
 </template>
-<script lang="ts">
-import { defineComponent, ref } from "vue";
-export default defineComponent({
-  name: 'SectionTab'
-})
-</script>
 <script setup lang="ts">
+import { ref } from "vue";
 interface SectionItem {
   id: string,
   label: string,
