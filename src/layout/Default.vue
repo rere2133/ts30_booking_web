@@ -44,6 +44,7 @@
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
 const { getImageUrl, webOrMobile } = useHelper();
+const router = useRouter();
 </script>
 
 <style scoped lang="scss">

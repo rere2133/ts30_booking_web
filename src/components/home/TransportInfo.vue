@@ -1,6 +1,6 @@
 <template>
-  <HomeContainer class="tw-relative tw-bg-blackbg container">
-    <v-container max-width="900" class="tw-pb-[100px] lg:tw-pb-[140px]">
+  <HomeContainer class="tw-bg-blackbg tw-relative">
+    <div class="container tw-pb-[100px] lg:tw-pb-[140px]">
       <div class="tw-flex tw-items-center tw-w-[200px] tw-gap-4 tw-mb-10">
         <h2
           class="tw-text-h4 tw-text-primary-100 lg:tw-text-h2 tw-whitespace-nowrap"
@@ -21,10 +21,9 @@
           :trans="trans"
         />
       </div>
-    </v-container>
-
+    </div>
     <img
-      class="tw-absolute tw-left-[-32px] lg:tw-left-[-45px] tw-bottom-0 tw-w-[180vw] tw-min-w-[180vw] lg:tw-w-[100vw] lg:tw-min-w-[100vw] tw-max-h-[140px]"
+      class="tw-absolute tw-left-[-32px] lg:tw-left-0 tw-bottom-0 tw-w-[180vw] tw-min-w-[180vw] lg:tw-w-[100vw] lg:tw-min-w-[100vw] tw-max-h-[140px]"
       :src="getImageUrl('line3.png')"
     />
   </HomeContainer>

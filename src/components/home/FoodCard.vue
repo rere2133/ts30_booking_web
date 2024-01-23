@@ -1,7 +1,7 @@
 <template>
   <div
     class="tw-relative tw-min-w-[350px] lg:tw-min-w-[416px] tw-h-[600px] tw-bg-cover tw-bg-center tw-bg-no-repeat tw-rounded-lg tw-overflow-hidden"
-    :class="`tw-bg-[url('/imgs/web/${food.img}')]`"
+    :class="`tw-bg-${food.img}`"
   >
     <div
       class="cardBg tw-w-full tw-h-[36%] lg:tw-h-[200px] tw-absolute tw-bottom-0 tw-p-6"

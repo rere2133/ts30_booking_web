@@ -18,9 +18,14 @@
           <hr class="gb-divider textGradient tw-mt-4 tw-w-full" />
         </div>
         <div
-          class="tw-flex tw-gap-4 tw-overflow-x-scroll tw-w-full lg:tw-w-[85vw]"
+          class="tw-flex tw-overflow-x-scroll tw-pb-4 tw-mr-4 tw-w-full lg:tw-w-[84vw] scrollBar"
         >
-          <FoodCard v-for="food in homeData.food" :key="food.id" :food="food" />
+          <FoodCard
+            v-for="food in homeData.food"
+            :key="food.id"
+            :food="food"
+            class="tw-mr-5"
+          />
         </div>
       </div>
     </div>
@@ -42,4 +47,10 @@ import { homeData } from "@/utils/homeData";
 const { getImageUrl } = useHelper();
 </script>
 
-<style scoped></style>
+<style scoped>
+.scrollBar {
+  ::-webkit-scrollbar {
+    height: 5px;
+  }
+}
+</style>
