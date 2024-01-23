@@ -26,14 +26,16 @@
     <v-main style="--v-layout-top: 120px; --v-layout-bottom: 0px">
       <router-view></router-view>
     </v-main>
+    <v-footer class="tw-px-[16px] tw-py-[80px] md:tw-pb-[120px] lg:tw-px-[80px] tw-bg-black-bg">
+      <Footer></Footer>
+    </v-footer>
   </v-app>
 </template>
 
 <script setup lang="ts">
-// import { img_host } from "@/utils/imageSource";
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
-
+import Footer from "@/components/Footer.vue";
 const { getImageUrl } = useHelper();
 const router = useRouter();
 </script>
