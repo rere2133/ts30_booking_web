@@ -9,7 +9,7 @@
       />
     </div> -->
     <div
-      class="container tw-pt-[40px] tw-max-h-screen tw-flex tw-flex-wrap tw-gap-8 tw-w-full tw-h-[75vh] lg:tw-h-[90vh] lg:tw-flex-nowrap"
+      class="container tw-pt-[40px] tw-px-10 tw-max-h-screen tw-flex tw-flex-wrap tw-gap-8 tw-w-full tw-h-[75vh] lg:tw-h-[90vh] lg:tw-flex-nowrap"
       :class="$attrs.justify || 'tw-justify-between'"
     >
       <!-- <div class="tw-flex tw-flex-wrap tw-items-center tw-relative tw-h-[600px]"> -->

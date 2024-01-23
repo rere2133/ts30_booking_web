@@ -28,7 +28,7 @@
           </div>
         </div>
         <div v-else>
-          <v-icon icon="mdi-menu" class="tw-mr-4" />
+          <v-icon icon="mdi-menu" class="tw-pr-4" />
         </div>
       </template>
     </v-app-bar>
@@ -41,12 +41,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
-import { useDisplay } from "vuetify";
-const router = useRouter();
 const { getImageUrl, webOrMobile } = useHelper();
+const router = useRouter();
 </script>
 
 <style scoped lang="scss">

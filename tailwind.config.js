@@ -54,6 +54,11 @@ export default {
       backgroundImage: {
         'member-hero': `url("${img_desktop_host}/hero.png")`,
         'desktop-bottom-line': `url("@/assets/svg/desktop_bottom_line.svg")`,
+        'food1': `url("/imgs/web/food1.png")`,
+        'food2': `url("/imgs/web/food2.png")`,
+        'food3': `url("/imgs/web/food3.png")`,
+        'food4': `url("/imgs/web/food4.png")`,
+        'food5': `url("/imgs/web/food5.png")`,
       }
     },
   },
