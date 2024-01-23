@@ -1,6 +1,8 @@
 <template>
-  <HomeContainer class="tw-bg-primary-40 tw-relative tw-z-10 tw-py-20">
-    <v-container max-width="900">
+  <HomeContainer
+    class="tw-bg-primary-40 tw-relative tw-z-10 tw-py-20 tw-overflow-hidden"
+  >
+    <div class="container">
       <v-row justify="space-between" wrap>
         <v-col cols="12" lg="1">
           <h2
@@ -19,7 +21,7 @@
           />
         </v-col>
       </v-row>
-    </v-container>
+    </div>
     <v-img class="dotImg dot1" :src="getImageUrl('dot.png')"></v-img>
     <v-img class="dotImg dot2" :src="getImageUrl('dot.png')"></v-img>
   </HomeContainer>

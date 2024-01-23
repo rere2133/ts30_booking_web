@@ -1,13 +1,13 @@
 <template>
   <HomeContainer class="tw-relative tw-bg-primary-40 tw-py-20">
-    <div class="tw-flex tw-pl-6">
+    <div class="tw-flex lg:tw-pl-6">
       <div class="tw-hidden lg:tw-block tw-flex-none tw-w-[15vw] tw-relative">
         <img
           :src="getImageUrl('line.png')"
           class="tw-w-[10vw] tw-absolute tw-top-[5%] tw-left-[20%]"
         />
       </div>
-      <div class="tw-w-full">
+      <div class="tw-w-full container">
         <div class="tw-flex tw-items-center tw-w-[200px] tw-gap-4 tw-mb-10">
           <h2
             class="tw-text-h4 tw-text-primary-100 lg:tw-text-h2 tw-whitespace-nowrap"
