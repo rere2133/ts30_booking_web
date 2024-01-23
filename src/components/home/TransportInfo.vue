@@ -1,5 +1,5 @@
 <template>
-  <HomeContainer class="tw-bg-blackbg tw-relative">
+  <HomeContainer class="tw-bg-blackbg tw-relative tw-overflow-hidden">
     <div class="container tw-pb-[100px] lg:tw-pb-[140px]">
       <div class="tw-flex tw-items-center tw-w-[200px] tw-gap-4 tw-mb-10">
         <h2
