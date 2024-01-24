@@ -1,11 +1,13 @@
 <template>
-  <div class="tw-h-screen tw-flex tw-overflow-hidden">
+  <div class="tw-h-[90vh] tw-pt-10 lg:tw-pt-0 tw-flex">
     <div
-      class="tw-w-1/2 tw-bg-cover tw-bg-center"
+      class="tw-w-1/2 tw-bg-cover tw-bg-center tw-hidden lg:tw-block"
       :style="`background-image: url(${getImageUrl('register.png')});`"
     ></div>
-    <div class="tw-w-1/2 tw-flex tw-flex-col tw-justify-center">
-      <div id="login-area" class="tw-w-[416px] mx-auto">
+    <div
+      class="tw-w-full lg:tw-w-1/2 tw-flex tw-flex-col tw-justify-center tw-px-4"
+    >
+      <div id="login-area">
         <div class="tw-flex tw-flex-col tw-gap-10">
           <div class="tw-flex tw-flex-col tw-gap-2">
             <div class="tw-text-[#bf9d7d] tw-text-sm tw-font-bold">
