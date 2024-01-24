@@ -65,8 +65,9 @@
               v-for="link in links"
               :key="link.path"
               @click="toPage(link.path)"
+              class="tw-py-8"
             >
-              <p v-if="link.title != '立即訂房'" class="tw-text-title tw-mb-8">
+              <p v-if="link.title != '立即訂房'" class="tw-text-title">
                 {{ link.title }}
               </p>
               <div
@@ -124,7 +125,7 @@ const toPage = (path: string) => {
   align-items: center;
   justify-content: center;
   z-index: 999; /* 确保在页面上其他元素之上 */
-  opacity: 0.9;
+  opacity: 0.98;
 }
 
 .overlay-content {
