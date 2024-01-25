@@ -71,7 +71,6 @@ import RoomInfoCard from "@/components/rooms/RoomInfoCard.vue";
 import RoomDetailCard from "@/components/rooms/RoomDetailCard.vue";
 import RoomBookingList from "@/components/rooms/RoomBookingList.vue";
 import { useHelper } from "@/utils/useHelper";
-import { log } from "console";
 
 const { getImageUrl } = useHelper();
 const router = useRouter();
