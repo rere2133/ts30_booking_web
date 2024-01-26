@@ -4,11 +4,11 @@
       class="tw-w-1/2 tw-bg-cover tw-bg-center tw-hidden lg:tw-block"
       :style="`background-image: url(${getImageUrl('register.png')});`"
     ></div>
-    <div class="tw-w-full lg:tw-w-1/2 tw-flex tw-flex-col tw-justify-center tw-align-middle tw-px-4" style="align-items: center">
-      <div class="tw-flex tw-flex-col tw-gap-6">
+    <div class="tw-w-full lg:tw-w-1/2 tw-flex tw-justify-center tw-items-center tw-px-4">
+      <div class="tw-flex tw-flex-col tw-gap-5 lg:tw-w-1/2 tw-w-full">
         <div class="tw-flex tw-flex-col tw-gap-4">
           <div class="tw-flex tw-flex-col tw-gap-2">
-            <div v-if="currStep === 1" class="tw-text-[#bf9d7d] lg:tw-text-lg tw-font-bold tw-tracking-wide">享樂酒店，誠摯歡迎</div>
+            <div class="tw-text-[#bf9d7d] lg:tw-text-lg tw-font-bold tw-tracking-wide">享樂酒店，誠摯歡迎</div>
             <div class="tw-text-white tw-text-3xl lg:tw-text-5xl tw-font-bold tw-tracking-widest">立即註冊</div>
           </div>
           <div class="tw-flex tw-flex-col tw-pt-4 tw-pb-4 tw-gap-4">
@@ -73,12 +73,12 @@
                 id="confirmPassword"
                 type="password"
                 placeholder="請再輸入一次密碼"
-                class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border"
+                class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-w-full"
                 v-model="confirmPassword"
               />
             </div>
           </template>
-          <template v-if="currStep === 2">
+          <template v-else-if="currStep === 2">
             <div class="tw-flex tw-flex-col tw-gap-2 tw-w-full">
               <label for="" class="tw-text-white tw-font-bold">姓名</label>
               <input
@@ -129,7 +129,7 @@
                 <input id="address" type="text" class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-w-full" />
               </div>
             </div>
-            <div class="tw-flex tw-gap-2 tw-w-full">
+            <div class="tw-hidden tw-gap-2 tw-w-full">
               <input type="checkbox" name="" id="" />
               <label for="" class="tw-text-white tw-font-bold">我已閱讀並同意本網站個資使用規範</label>
             </div>
@@ -144,6 +144,7 @@
                 id="nextStep"
                 class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full"
                 v-if="currStep === 1"
+                v-on:click="nextStep"
               >
                 下一步
               </button>
@@ -152,6 +153,7 @@
                 id="submit"
                 class="tw-p-4 tw-text-center tw-bg-[#bf9d7d] tw-text-white tw-text-sm tw-font-bold tw-w-full"
                 v-if="currStep === 2"
+                v-on:click="nextStep"
               >
                 完成註冊
               </button>
@@ -175,7 +177,7 @@ import { useHelper } from "@/utils/useHelper";
 //import { VStepper, VStepperHeader, VStepperStep, VStepperContent, VForm, VTextField, VBtn } from "vuetify";
 const { getImageUrl } = useHelper();
 const router = useRouter();
-let currStep = ref<number>(1);
+let currStep = ref<number>(2);
 const valid = ref(false);
 const email = ref("");
 const password = ref("");
@@ -198,6 +200,15 @@ const setDaysRange = () => {
 };
 watch(() => birthYear.value, setDaysRange);
 watch(() => birthMonth.value, setDaysRange);
+
+//if click nextStep, currStep = 2; if click submit, currStep = 1
+const nextStep = () => {
+  if (currStep.value === 1) {
+    currStep.value = 2;
+  } else {
+    currStep.value = 1;
+  }
+};
 </script>
 
 <style scoped></style>
