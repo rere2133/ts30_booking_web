@@ -146,7 +146,7 @@ const handleScroll = () => {
   if (window.scrollY > bookingPosition.value!.offsetTop) {
     fixedBookingList.value = true;
     let width = getbookingWrapWidth();
-    console.log({ width });
+    // console.log({ width });
 
     bookingList.value?.style.setProperty(
       "--bookingWrapWidth",
