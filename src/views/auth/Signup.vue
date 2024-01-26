@@ -8,7 +8,7 @@
       <div class="tw-flex tw-flex-col tw-gap-6">
         <div class="tw-flex tw-flex-col tw-gap-4">
           <div class="tw-flex tw-flex-col tw-gap-2">
-            <div v-if="currStep === 1" class="tw-text-[#bf9d7d] tw-text-lg tw-font-bold tw-tracking-wide">享樂酒店，誠摯歡迎</div>
+            <div v-if="currStep === 1" class="tw-text-[#bf9d7d] lg:tw-text-lg tw-font-bold tw-tracking-wide">享樂酒店，誠摯歡迎</div>
             <div class="tw-text-white tw-text-3xl lg:tw-text-5xl tw-font-bold tw-tracking-widest">立即註冊</div>
           </div>
           <div class="tw-flex tw-flex-col tw-pt-4 tw-pb-4 tw-gap-4">
@@ -25,8 +25,16 @@
               </div>
               <div class="tw-w-full tw-h-0.5 tw-bg-gray-400"></div>
               <div class="tw-w-auto tw-flex tw-flex-col tw-justify-center tw-items-center tw-gap-1">
-                <div class="tw-w-8 tw-h-8 tw-rounded-full tw-border tw-border-gray-400 tw-flex tw-justify-center tw-items-center">
-                  <div class="tw-text-center tw-text-gray-400 tw-text-lg tw-font-bold tw-leading-6 tw-tracking-wider">2</div>
+                <div
+                  class="tw-w-8 tw-h-8 tw-rounded-full tw-border tw-border-gray-400 tw-flex tw-justify-center tw-items-center"
+                  :class="currStep === 2 ? 'tw-bg-[#bf9d7d]' : ''"
+                >
+                  <div
+                    class="tw-text-center tw-text-lg tw-font-bold tw-leading-6 tw-tracking-wider"
+                    :class="currStep === 2 ? 'tw-text-white' : 'tw-text-gray-400'"
+                  >
+                    2
+                  </div>
                 </div>
                 <div
                   class="tw-text-center tw-text-gray-400 tw-text-sm lg:tw-text-lg tw-font-bold tw-leading-6 tw-tracking-wider tw-whitespace-nowrap"
@@ -131,8 +139,21 @@
           <div>
             <div class="tw-text-red-500 tw-text-center tw-mb-1"></div>
             <div class="tw-flex-1 tw-flex tw-justify-center tw-items-center tw-bg-gray-200 tw-rounded">
-              <button type="submit" id="login" class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full">
+              <button
+                type="button"
+                id="nextStep"
+                class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full"
+                v-if="currStep === 1"
+              >
                 下一步
+              </button>
+              <button
+                type="submit"
+                id="submit"
+                class="tw-p-4 tw-text-center tw-bg-[#bf9d7d] tw-text-white tw-text-sm tw-font-bold tw-w-full"
+                v-if="currStep === 2"
+              >
+                完成註冊
               </button>
             </div>
           </div>
@@ -154,7 +175,7 @@ import { useHelper } from "@/utils/useHelper";
 //import { VStepper, VStepperHeader, VStepperStep, VStepperContent, VForm, VTextField, VBtn } from "vuetify";
 const { getImageUrl } = useHelper();
 const router = useRouter();
-let currStep = ref<number>(2);
+let currStep = ref<number>(1);
 const valid = ref(false);
 const email = ref("");
 const password = ref("");
