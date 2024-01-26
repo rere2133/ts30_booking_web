@@ -143,7 +143,7 @@ const bookingPosition = ref({
   offsetLeft: 0,
 });
 const handleScroll = () => {
-  if (window.scrollY > bookingPosition.value!.offsetTop) {
+  if (window.scrollY > bookingPosition.value!.offsetTop - 100) {
     fixedBookingList.value = true;
     let width = getbookingWrapWidth();
     // console.log({ width });
