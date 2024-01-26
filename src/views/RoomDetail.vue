@@ -49,13 +49,13 @@
         </v-col>
         <v-col
           ref="bookingWrap"
-          class="tw-hidden lg:tw-block bookingWrap tw-min-w-[400px]"
+          class="tw-hidden lg:tw-block bookingWrap tw-w-[400px]"
         >
-          <div
-            ref="bookingList"
-            :class="fixedBookingList ? 'fixedBooking' : ''"
-          >
-            <RoomBookingList :roomInfo="roomInfo" />
+          <div ref="bookingList">
+            <RoomBookingList
+              :roomInfo="roomInfo"
+              :class="fixedBookingList ? 'fixedBooking' : ''"
+            />
           </div>
         </v-col>
       </v-row>
@@ -148,7 +148,10 @@ const handleScroll = () => {
     let width = getbookingWrapWidth();
     console.log({ width });
 
-    bookingList.value?.style.setProperty("--bookingWrapWidth", `${width}px`);
+    bookingList.value?.style.setProperty(
+      "--bookingWrapWidth",
+      `${width - 24}px`
+    );
     bookingList.value?.style.setProperty(
       "--bookingWrapLeft",
       `${bookingPosition.value!.offsetLeft}px`
@@ -182,6 +185,7 @@ onUnmounted(() => {
   @apply tw-text-h5 tw-mt-20 tw-pl-4 tw-border-l-4 tw-border-primary-100;
 }
 .fixedBooking {
+  width: var(--bookingWrapWidth);
   min-width: var(--bookingWrapWidth);
   position: fixed;
   top: 100px;
