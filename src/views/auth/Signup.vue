@@ -139,7 +139,9 @@
                   type="text"
                   placeholder="請輸入詳細地址"
                   class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-w-full"
+                  v-model="addressDetail"
                 />
+                <div class="tw-text-red-500">{{ errMsg.addressDetail }}</div>
               </div>
             </div>
             <div class="tw-hidden tw-gap-2 tw-w-full">
@@ -202,6 +204,7 @@ type Address = {
   zipcode: number;
   county: string;
   city: string;
+  detail: string;
 };
 type SignupInfo = {
   name: string;
@@ -224,6 +227,7 @@ const phone = ref<string>("");
 const cityName = ref<string>("");
 const countyName = ref<string>("");
 const zipcodeStr = ref<string>("");
+const addressDetail = ref<string>("");
 const errMsg = ref({
   email: "",
   password: "",
@@ -231,6 +235,7 @@ const errMsg = ref({
   name: "",
   phone: "",
   birthDay: "",
+  addressDetail: "",
 });
 
 // 日期區間設定
@@ -306,7 +311,13 @@ function validate2() {
     errMsg.value.birthDay = "";
   }
 
-  return errMsg.value.name === "" && errMsg.value.phone === "" && errMsg.value.birthDay === "";
+  if (!addressDetail.value) {
+    errMsg.value.addressDetail = "地址為必填欄位";
+  } else {
+    errMsg.value.addressDetail = "";
+  }
+
+  return errMsg.value.name === "" && errMsg.value.phone === "" && errMsg.value.birthDay === "" && errMsg.value.addressDetail === "";
 }
 
 const setAreaList = () => {
@@ -330,6 +341,7 @@ const submitSignup = () => {
           (item: Area) => item.ZipCode === zipcodeStr.value
         ).AreaName || "",
       city: cityName.value,
+      detail: addressDetail.value,
     },
   };
 
