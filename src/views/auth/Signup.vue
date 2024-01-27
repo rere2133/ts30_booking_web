@@ -56,6 +56,7 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border"
                 v-model="email"
               />
+              <div class="tw-text-red-500">{{ errMsg.email }}</div>
             </div>
             <div class="tw-flex tw-flex-col tw-gap-2 tw-w-full">
               <label for="" class="tw-text-white tw-font-bold">密碼</label>
@@ -66,6 +67,7 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border"
                 v-model="password"
               />
+              <div class="tw-text-red-500">{{ errMsg.password }}</div>
             </div>
             <div class="tw-flex tw-flex-col tw-gap-2 tw-w-full">
               <label for="" class="tw-text-white tw-font-bold">確認密碼</label>
@@ -76,6 +78,7 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-w-full"
                 v-model="confirmPassword"
               />
+              <div class="tw-text-red-500">{{ errMsg.passwordConfirm }}</div>
             </div>
           </template>
           <template v-else-if="currStep === 2">
@@ -88,6 +91,7 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border"
                 v-model="name"
               />
+              <div class="tw-text-red-500">{{ errMsg.name }}</div>
             </div>
             <div class="tw-flex tw-flex-col tw-gap-2 tw-w-full">
               <label for="" class="tw-text-white tw-font-bold">手機號碼</label>
@@ -98,6 +102,7 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border"
                 v-model="phone"
               />
+              <div class="tw-text-red-500">{{ errMsg.phone }}</div>
             </div>
             <div class="tw-flex tw-flex-col tw-gap-2 tw-w-full">
               <label for="" class="tw-text-white tw-font-bold">生日</label>
@@ -114,19 +119,27 @@
                   <option v-for="i in daysRange" :key="i" :value="i">{{ i }} 日</option>
                 </select>
               </div>
+              <div class="tw-text-red-500">{{ errMsg.birthDay }}</div>
             </div>
             <div class="tw-flex tw-flex-col tw-gap-2 tw-w-full">
               <label for="" class="tw-text-white tw-font-bold">地址</label>
               <div class="tw-flex tw-gap-2 tw-flex-wrap">
-                <select id="city" class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-flex-1">
-                  <option>台北市</option>
-                  <option>新北市</option>
+                <select id="city" class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-flex-1" v-model="cityName">
+                  <option v-for="city in CityCountyData" :key="city.CityName" :value="city.CityName">
+                    {{ city.CityName }}
+                  </option>
                 </select>
                 <select id="area" class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-flex-1">
-                  <option>中正區</option>
-                  <option>大同區</option>
+                  <option v-for="area in areaList" :key="area.ZipCode" :value="area.ZipCode">
+                    {{ area.AreaName }}
+                  </option>
                 </select>
-                <input id="address" type="text" class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-w-full" />
+                <input
+                  id="address"
+                  type="text"
+                  placeholder="請輸入詳細地址"
+                  class="tw-p-4 tw-bg-white tw-text-gray-600 tw-rounded tw-border tw-w-full"
+                />
               </div>
             </div>
             <div class="tw-hidden tw-gap-2 tw-w-full">
@@ -174,16 +187,52 @@ import { ref, onMounted, watch } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
-//import { VStepper, VStepperHeader, VStepperStep, VStepperContent, VForm, VTextField, VBtn } from "vuetify";
+import CityCountyData from "/public/CityCountyData";
+type Area = {
+  ZipCode: string;
+  AreaName: string;
+  AreaEngName: string;
+};
+type City = {
+  CityName: string;
+  CityEngName: string;
+  AreaList: Area[];
+};
+type Address = {
+  zipcode: number;
+  county: string;
+  city: string;
+};
+type SignupInfo = {
+  name: string;
+  email: string;
+  password: string;
+  phone: string;
+  birthday: string;
+  address: Address;
+};
+
 const { getImageUrl } = useHelper();
 const router = useRouter();
-let currStep = ref<number>(2);
-const valid = ref(false);
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
-const name = ref("");
-const phone = ref("");
+let currStep = ref<number>(1);
+const areaList = ref<Area[]>([]);
+const name = ref<string>("");
+const email = ref<string>("");
+const password = ref<string>("");
+const confirmPassword = ref<string>("");
+const phone = ref<string>("");
+const cityName = ref<string>("");
+const countyName = ref<string>("");
+const zipcodeStr = ref<string>("");
+const errMsg = ref({
+  email: "",
+  password: "",
+  passwordConfirm: "",
+  name: "",
+  phone: "",
+  birthDay: "",
+});
+
 // 日期區間設定
 const birthYear = ref(new Date().getFullYear() - 25);
 const birthMonth = ref(1);
@@ -200,14 +249,101 @@ const setDaysRange = () => {
 };
 watch(() => birthYear.value, setDaysRange);
 watch(() => birthMonth.value, setDaysRange);
+watch(cityName, () => setAreaList());
 
-//if click nextStep, currStep = 2; if click submit, currStep = 1
+onMounted(() => {
+  cityName.value = CityCountyData[0].CityName;
+  setAreaList();
+});
+
 const nextStep = () => {
   if (currStep.value === 1) {
-    currStep.value = 2;
+    currStep.value = validate1() ? 2 : 1;
   } else {
-    currStep.value = 1;
+    if (validate2()) {
+      submitSignup();
+    }
   }
+};
+
+function validate1() {
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  if (!emailPattern.test(email.value)) {
+    errMsg.value.email = "Email 格式不正確";
+  } else {
+    errMsg.value.email = "";
+  }
+
+  if (password.value.length < 4) {
+    errMsg.value.password = "密碼長度不足 4 個字元";
+  } else if (password.value !== confirmPassword.value) {
+    errMsg.value.passwordConfirm = "密碼不一致";
+  } else {
+    errMsg.value.password = "";
+    errMsg.value.passwordConfirm = "";
+  }
+
+  return errMsg.value.email === "" && errMsg.value.password === "" && errMsg.value.passwordConfirm === "";
+}
+function validate2() {
+  if (!name.value) {
+    errMsg.value.name = "姓名為必填欄位";
+  } else {
+    errMsg.value.name = "";
+  }
+
+  if (!phone.value) {
+    errMsg.value.phone = "手機號碼為必填欄位";
+  } else if (phone.value.length !== 10) {
+    errMsg.value.phone = "手機號碼格式不正確";
+  } else {
+    errMsg.value.phone = "";
+  }
+
+  if (!birthYear.value || !birthMonth.value || !birthDay.value) {
+    errMsg.value.birthDay = "生日為必填欄位";
+  } else {
+    errMsg.value.birthDay = "";
+  }
+
+  return errMsg.value.name === "" && errMsg.value.phone === "" && errMsg.value.birthDay === "";
+}
+
+const setAreaList = () => {
+  const currCity: City = CityCountyData.find((item: City) => item.CityName === cityName.value);
+  if (currCity) areaList.value = currCity.AreaList;
+  zipcodeStr.value = areaList.value[0].ZipCode;
+  countyName.value = areaList.value[0].AreaName;
+};
+
+const submitSignup = () => {
+  const dataModel: SignupInfo = {
+    name: name.value,
+    email: email.value,
+    password: password.value,
+    phone: phone.value,
+    birthday: `${birthYear.value}-${birthMonth.value}-${birthDay.value}`,
+    address: {
+      zipcode: Number(zipcodeStr.value) || 0,
+      county:
+        CityCountyData.find((item: City) => item.CityName === cityName.value).AreaList.find(
+          (item: Area) => item.ZipCode === zipcodeStr.value
+        ).AreaName || "",
+      city: cityName.value,
+    },
+  };
+
+  // 發送POST請求
+  axios
+    .post("https://hotel-reservation-backend-sgtq.onrender.com/api/v1/user/signup", dataModel)
+    .then(() => {
+      alert("註冊成功");
+      router.push("/login");
+    })
+    .catch((error) => {
+      console.error("註冊失敗：", error);
+      alert("註冊失敗");
+    });
 };
 </script>
 
