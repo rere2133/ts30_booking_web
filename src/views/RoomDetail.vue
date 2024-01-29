@@ -54,7 +54,7 @@
           <div ref="bookingList">
             <RoomBookingList
               :roomInfo="roomInfo"
-              :class="fixedBookingList ? 'fixedBooking' : ''"
+              :class="`bookingList ${fixedBookingList ? 'fixedBooking' : ''}`"
             />
           </div>
         </v-col>
@@ -143,15 +143,15 @@ const bookingPosition = ref({
   offsetLeft: 0,
 });
 const handleScroll = () => {
-  if (window.scrollY > bookingPosition.value!.offsetTop) {
+  if (window.scrollY > bookingPosition.value!.offsetTop - 100) {
     fixedBookingList.value = true;
-    let width = getbookingWrapWidth();
-    // console.log({ width });
+    let width = getBookingWrapWidth();
 
     bookingList.value?.style.setProperty(
       "--bookingWrapWidth",
       `${width - 24}px`
     );
+    bookingList.value?.style.setProperty("--bookingWrapTop", `100px`);
     bookingList.value?.style.setProperty(
       "--bookingWrapLeft",
       `${bookingPosition.value!.offsetLeft}px`
@@ -160,12 +160,12 @@ const handleScroll = () => {
     fixedBookingList.value = false;
   }
 };
-const getbookingWrapWidth = (): number => {
+const getBookingWrapWidth = (): number => {
   const bookingWrap: HTMLElement | null =
     document.querySelector(".bookingWrap");
   if (bookingWrap === null) return 0;
   const width = bookingWrap.getBoundingClientRect().width;
-  return width || 0;
+  return width;
 };
 
 onMounted(() => {
@@ -188,7 +188,7 @@ onUnmounted(() => {
   width: var(--bookingWrapWidth);
   min-width: var(--bookingWrapWidth);
   position: fixed;
-  top: 100px;
+  top: var(--bookingWrapTop);
   left: var(--bookingWrapLeft);
   z-index: 10;
 }

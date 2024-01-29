@@ -22,7 +22,7 @@
         <div
           class="lg:tw-mt-[50%] tw-pl-10 tw-w-[90%] lg:tw-w-[75%] tw-max-w-[560px] tw-relative tw-z-10"
         >
-          <h2 class="tw-text-h2 tw-mb-4">尊爵雙人房</h2>
+          <h2 class="tw-text-h4 lg:tw-text-h2 tw-mb-4">尊爵雙人房</h2>
           <p>
             享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。
           </p>
