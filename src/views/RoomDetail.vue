@@ -94,6 +94,7 @@ const roomInfo = ref({
     {
       icon: "mdi-account",
       num: "2-4",
+      maxNum: "4",
       unit: "人",
     },
   ],

@@ -10,9 +10,14 @@ export function useHelper(){
   const getImageUrl = (fileName:string):string=>{
     return `/imgs/${img_host[webOrMobile.value]}/${fileName}`
   }
+  const dateFormat = (date:Date):string=>{
+    if(!date) return ''
+    return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`
+  }
 
   return{
     webOrMobile,
-    getImageUrl
+    getImageUrl,
+    dateFormat
   }
 }
