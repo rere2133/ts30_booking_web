@@ -4,15 +4,24 @@
       class="tw-w-1/2 tw-bg-cover tw-bg-center tw-hidden lg:tw-block"
       :style="`background-image: url(${getImageUrl('register.png')});`"
     ></div>
-    <div class="tw-w-full lg:tw-w-1/2 tw-flex tw-justify-center tw-items-center tw-px-4">
-      <form class="tw-flex tw-flex-col tw-gap-5 lg:tw-w-1/2 tw-w-full" @submit.prevent="login">
+    <div
+      class="tw-w-full lg:tw-w-1/2 tw-flex tw-justify-center tw-items-center tw-px-4"
+    >
+      <form
+        class="tw-flex tw-flex-col tw-gap-5 lg:tw-w-1/2 tw-w-full"
+        @submit.prevent="login"
+      >
         <div class="tw-flex tw-flex-col tw-gap-2">
-          <div class="tw-text-[#bf9d7d] tw-text-sm tw-font-bold">享樂酒店，誠摯歡迎</div>
+          <div class="tw-text-[#bf9d7d] tw-text-sm tw-font-bold">
+            享樂酒店，誠摯歡迎
+          </div>
           <div class="tw-text-white tw-text-4xl tw-font-bold">立即開始旅程</div>
         </div>
         <div class="tw-flex tw-flex-col tw-gap-4">
           <div class="tw-flex tw-flex-col tw-gap-2">
-            <label for="" class="tw-text-white tw-text-sm tw-font-bold">電子信箱</label>
+            <label for="" class="tw-text-white tw-text-sm tw-font-bold"
+              >電子信箱</label
+            >
             <input
               id="email"
               type="email"
@@ -22,7 +31,9 @@
             />
           </div>
           <div class="tw-flex tw-flex-col tw-gap-2">
-            <label for="" class="tw-text-white tw-text-sm tw-font-bold">密碼</label>
+            <label for="" class="tw-text-white tw-text-sm tw-font-bold"
+              >密碼</label
+            >
             <input
               id="password"
               type="password"
@@ -33,11 +44,24 @@
           </div>
           <div class="tw-flex">
             <div class="tw-flex-1 tw-flex tw-items-center tw-gap-2">
-              <input type="checkbox" class="tw-w-6 tw-h-6" id="remember" v-model="rememberMe" />
-              <label for="remember" class="tw-text-white tw-text-sm tw-font-bold">記住帳號</label>
+              <input
+                type="checkbox"
+                class="tw-w-6 tw-h-6"
+                id="remember"
+                v-model="rememberMe"
+              />
+              <label
+                for="remember"
+                class="tw-text-white tw-text-sm tw-font-bold"
+                >記住帳號</label
+              >
             </div>
             <div class="tw-flex tw-justify-center tw-items-center">
-              <a href="#" class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline">忘記密碼？</a>
+              <a
+                href="#"
+                class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline"
+                >忘記密碼？</a
+              >
             </div>
           </div>
         </div>
@@ -45,16 +69,28 @@
           <div v-if="loginError" class="tw-text-red-500 tw-text-center tw-mb-2">
             {{ loginError }}
           </div>
-          <div class="tw-flex-1 tw-flex tw-justify-center tw-items-center tw-bg-gray-200 tw-rounded">
-            <button type="submit" id="login" class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full">
+          <div
+            class="tw-flex-1 tw-flex tw-justify-center tw-items-center tw-bg-gray-200 tw-rounded"
+          >
+            <button
+              type="submit"
+              id="login"
+              class="tw-p-4 tw-text-center tw-text-gray-600 tw-text-sm tw-font-bold tw-w-full"
+            >
               會員登入
             </button>
           </div>
         </div>
 
-        <div class="tw-flex-1 tw-flex tw-justify-start tw-items-center tw-gap-2">
+        <div
+          class="tw-flex-1 tw-flex tw-justify-start tw-items-center tw-gap-2"
+        >
           <div class="tw-text-white tw-text-sm">沒有會員嗎？</div>
-          <router-link to="/signup" class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline">前往註冊</router-link>
+          <router-link
+            to="/signup"
+            class="tw-text-center tw-text-[#bf9d7d] tw-text-sm tw-font-bold tw-underline"
+            >前往註冊</router-link
+          >
         </div>
       </form>
     </div>
@@ -93,11 +129,15 @@ async function login() {
   loginError.value = "";
 
   try {
-    const response = await axios.post("https://hotel-reservation-backend-sgtq.onrender.com/api/v1/user/login", {
-      email: userInfo.value.email,
-      password: userInfo.value.password,
-    });
+    const response = await axios.post(
+      "https://hotel-reservation-backend-sgtq.onrender.com/api/v1/user/login",
+      {
+        email: userInfo.value.email,
+        password: userInfo.value.password,
+      }
+    );
     localStorage.setItem("auth_token", response.data.data.accessToken);
+    localStorage.setItem("userName", response.data.data.name);
 
     if (rememberMe.value) {
       localStorage.setItem("email", userInfo.value.email);
