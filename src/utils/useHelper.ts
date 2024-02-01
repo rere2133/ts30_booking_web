@@ -14,10 +14,14 @@ export function useHelper(){
     if(!date) return ''
     return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`
   }
+  const clearLocalStorage = ()=>{
+    localStorage.clear()
+  }
 
   return{
     webOrMobile,
     getImageUrl,
-    dateFormat
+    dateFormat,
+    clearLocalStorage
   }
 }
