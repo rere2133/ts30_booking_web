@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';  
 
 export const useAppStore = defineStore('app', () => {
+  const isLogin = ref(false)
   const navItems = ref([
     {
       title: "客房旅宿",
@@ -17,6 +18,7 @@ export const useAppStore = defineStore('app', () => {
     },
   ])
   return{
-    navItems
+    navItems,
+    isLogin
   }
 })

@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAppStore } from '@/store/app';
 
 const routes = [
   {
@@ -71,12 +72,34 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior() {
+    // 始终滚动到顶部
+    return { top: 0 };
+  }
 })
-router.beforeEach(() => {
-  // if (to.name !== 'Login' && !localStorage.getItem('token')) next({ name: 'Login' })
-  // else next()
-  window.scrollTo(0, 0)
-})
+
+
+router.beforeEach(async (to) => {
+  const appStore = useAppStore();
+  let authPage = ['Member','Profile','Orders','BookSucceed','Booking']
+  let token = localStorage.getItem('auth_token');
+  if (token) {
+    appStore.isLogin = true;
+    if (to.name == 'Login') {
+      console.log('hi');
+      return {
+        name: 'Home'
+      };
+    } 
+  }
+  if(to.name && authPage.includes(to.name.toString())){
+    if(!appStore.isLogin){
+      return {
+        name: 'Login'
+      }
+    }
+  }
+});
 
 export default router

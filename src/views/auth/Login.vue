@@ -103,6 +103,7 @@ import axios from "axios";
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
 import { useAppStore } from "@/store/app";
+// import { setAxios } from "@/plugins/axios";
 
 const appStore = useAppStore();
 const { getImageUrl } = useHelper();
@@ -140,6 +141,7 @@ async function login() {
       }
     );
     localStorage.setItem("auth_token", response.data.data.accessToken);
+    // setAxios(response.data.data.accessToken);
     localStorage.setItem("userName", response.data.data.name);
 
     if (rememberMe.value) {

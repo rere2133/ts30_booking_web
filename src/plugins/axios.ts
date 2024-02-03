@@ -8,6 +8,7 @@ let {setSnackBar} = snackbarStore;
 let exportAxios = axios.create();
 
 let setAxios = (token: string | null) => {
+  baseURL: 'https://hotel-reservation-backend-sgtq.onrender.com/api/v1/'
   exportAxios = axios.create({
     headers: {
       Authorization: token,
