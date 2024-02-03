@@ -102,6 +102,10 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
+import { useAppStore } from "@/store/app";
+// import { setAxios } from "@/plugins/axios";
+
+const appStore = useAppStore();
 const { getImageUrl } = useHelper();
 const router = useRouter();
 
@@ -137,6 +141,7 @@ async function login() {
       }
     );
     localStorage.setItem("auth_token", response.data.data.accessToken);
+    // setAxios(response.data.data.accessToken);
     localStorage.setItem("userName", response.data.data.name);
 
     if (rememberMe.value) {
@@ -146,6 +151,10 @@ async function login() {
       localStorage.removeItem("email");
       localStorage.removeItem("password");
     }
+    appStore.navItems.splice(1, 1, {
+      title: response.data.data.name,
+      path: "/member",
+    });
     router.push("/"); // 登入成功後導向首頁
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

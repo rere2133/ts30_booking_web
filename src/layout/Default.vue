@@ -15,19 +15,42 @@
       </template>
       <template #append>
         <div v-if="webOrMobile == 'web'" class="tw-flex tw-items-center">
-          <div v-for="link in links" :key="link.path">
-            <router-link
-              v-if="link.title != '立即訂房'"
-              :to="link.path"
-              class="mr-8 tw-text-md tw-font-bold"
-              >{{ link.title }}</router-link
-            >
+          <div v-for="link in appStore.navItems" :key="link.path">
             <div
-              v-else
+              v-if="link.title == '立即訂房'"
               class="mr-8 tw-text-md tw-font-bold tw-text-white tw-bg-primary-100 tw-py-4 tw-px-8 tw-rounded-lg tw-cursor-pointer hover:tw-bg-primary-80 tw-transition-all"
             >
               <router-link :to="link.path">{{ link.title }}</router-link>
             </div>
+            <p
+              v-else-if="link.path == '/member'"
+              class="mr-8 tw-text-md tw-font-bold tw-cursor-pointer"
+            >
+              {{ link.title }}
+              <v-menu activator="parent">
+                <v-list min-width="250">
+                  <v-list-item
+                    v-for="(item, index) in memeberItems"
+                    :key="index"
+                    :value="index"
+                    class="memberActive"
+                    @click="
+                      item.title == '會員資料' ? toPage(item.path) : logout()
+                    "
+                  >
+                    <v-list-item-title>
+                      {{ item.title }}
+                    </v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-menu>
+            </p>
+            <router-link
+              v-else
+              :to="link.path"
+              class="mr-8 tw-text-md tw-font-bold"
+              >{{ link.title }}</router-link
+            >
           </div>
         </div>
         <div v-else>
@@ -62,20 +85,23 @@
         <div class="overlay-content">
           <v-list bg-color="transparent" class="text-center tw-w-full">
             <v-list-item
-              v-for="link in links"
+              v-for="link in appStore.navItems"
               :key="link.path"
-              @click="toPage(link.path)"
               class="tw-py-8"
             >
-              <p v-if="link.title != '立即訂房'" class="tw-text-title">
-                {{ link.title }}
-              </p>
               <div
-                v-else
+                v-if="link.title == '立即訂房'"
                 class="tw-text-md tw-font-bold tw-text-white tw-bg-primary-100 tw-py-4 tw-w-[90%] tw-mx-auto tw-rounded-lg tw-cursor-pointer hover:tw-bg-primary-80 tw-transition-all"
+                @click="toPage(link.path)"
               >
                 {{ link.title }}
               </div>
+              <p v-else-if="link.path == '/member'" class="tw-text-title">
+                {{ link.title }}123
+              </p>
+              <p v-else class="tw-text-title" @click="toPage(link.path)">
+                {{ link.title }}
+              </p>
             </v-list-item>
           </v-list>
         </div>
@@ -85,31 +111,65 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
 import Footer from "@/components/Footer.vue";
-const { getImageUrl, webOrMobile } = useHelper();
+import { useAppStore } from "@/store/app";
+
+const appStore = useAppStore();
+const { getImageUrl, webOrMobile, clearLocalStorage } = useHelper();
 const router = useRouter();
 const showOverlay = ref(false);
-const links = ref([
+// const links = ref([
+//   {
+//     title: "客房旅宿",
+//     path: "/rooms",
+//   },
+//   {
+//     title: "會員登入",
+//     path: "/login",
+//   },
+//   {
+//     title: "立即訂房",
+//     path: "/rooms",
+//   },
+// ]);
+const memeberItems = ref([
   {
-    title: "客房旅宿",
-    path: "/rooms",
+    title: "會員資料",
+    path: "/member",
   },
   {
-    title: "會員登入",
-    path: "/login",
-  },
-  {
-    title: "立即訂房",
-    path: "/rooms",
+    title: "登出",
+    path: "",
   },
 ]);
 const toPage = (path: string) => {
   showOverlay.value = false;
   router.push(path);
 };
+const logout = () => {
+  clearLocalStorage();
+  location.reload();
+};
+const userName = computed(() => {
+  return localStorage.getItem("userName") || "";
+});
+watch(
+  userName,
+  (val) => {
+    if (val) {
+      appStore.navItems.splice(1, 1, {
+        title: userName.value,
+        path: "/member",
+      });
+    }
+  },
+  {
+    immediate: true,
+  }
+);
 </script>
 
 <style scoped lang="scss">
@@ -151,5 +211,11 @@ const toPage = (path: string) => {
 }
 .fade-enter-to, .fade-leave /* .fade-leave-active in <2.1.8 */ {
   transform: translateY(0);
+}
+.memberActive {
+  @apply tw-transition-all;
+  &:hover {
+    @apply tw-bg-primary-40 tw-text-primary-100;
+  }
 }
 </style>

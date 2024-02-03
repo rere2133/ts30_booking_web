@@ -23,28 +23,37 @@
     <div class="container">
       <v-row>
         <v-col cols="12" md="8">
-          <h1 class="tw-text-h1 tw-mb-4">{{ roomInfo.title }}</h1>
+          <h1 class="tw-text-h1 tw-mb-4">{{ roomInfo?.name }}</h1>
           <p class="tw-text-body tw-text-black-80">
-            {{ roomInfo.description }}
+            {{ roomInfo?.description }}
           </p>
-          <div class="roomTitle tw-mb-6">房型基本資訊</div>
+          <div class="roomTitle tw-text-h5 tw-mb-6">房型基本資訊</div>
           <div class="tw-flex tw-mt-8 tw-gap-2 md:tw-gap-4">
             <RoomInfoCard
-              v-for="info in roomInfo.info"
-              :key="info.icon"
-              :info="info"
               variant="solid"
+              icon="mdi-arrow-expand"
+              :info="roomInfo?.areaInfo"
+            />
+            <RoomInfoCard
+              variant="solid"
+              icon="mdi-bed"
+              :info="roomInfo?.bedInfo"
+            />
+            <RoomInfoCard
+              variant="solid"
+              icon="mdi-account"
+              :info="`${roomInfo?.maxPeople}人`"
             />
           </div>
-          <div class="roomTitle tw-mb-6">房間格局</div>
-          <RoomDetailCard :items="roomInfo.layout" />
-          <div class="roomTitle tw-mb-6">房內設備</div>
-          <RoomDetailCard :items="roomInfo.facility" />
-          <div class="roomTitle tw-mb-6">備品提供</div>
-          <RoomDetailCard :items="roomInfo.toiletries" />
-          <div class="roomTitle tw-mb-6">訂房須知</div>
+          <div class="roomTitle tw-text-h5 tw-mb-6">房間格局</div>
+          <RoomDetailCard :items="roomInfo?.layout" />
+          <div class="roomTitle tw-text-h5 tw-mb-6">房內設備</div>
+          <RoomDetailCard :items="roomInfo?.facilityInfo" />
+          <div class="roomTitle tw-text-h5 tw-mb-6">備品提供</div>
+          <RoomDetailCard :items="roomInfo?.amenityInfo" />
+          <div class="roomTitle tw-text-h5 tw-mb-6">訂房須知</div>
           <div class="tw-whitespace-pre-line tw-text-black-80 tw-leading-7">
-            {{ roomInfo.notice }}
+            {{ roomNotice }}
           </div>
         </v-col>
         <v-col
@@ -65,77 +74,74 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from "vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import HomeContainer from "@/components/home/HomeContainer.vue";
 import RoomInfoCard from "@/components/rooms/RoomInfoCard.vue";
 import RoomDetailCard from "@/components/rooms/RoomDetailCard.vue";
 import RoomBookingList from "@/components/rooms/RoomBookingList.vue";
 import { useHelper } from "@/utils/useHelper";
+import { useHttp } from "@/plugins/httpAxios";
+import { roomNotice } from "@/utils/roomNotice";
+import type { RoomType } from "@/types";
 
+const { _axios } = useHttp();
 const { getImageUrl } = useHelper();
 const router = useRouter();
-const roomInfo = ref({
-  id: 1,
-  title: "尊爵雙人房",
-  description:
-    "享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。",
-  imgs: ["room2-1.png"],
-  info: [
-    {
-      icon: "mdi-arrow-expand",
-      num: "24",
-      unit: "坪",
-    },
-    {
-      icon: "mdi-bed",
-      num: "1",
-      unit: "張大床",
-    },
-    {
-      icon: "mdi-account",
-      num: "2-4",
-      maxNum: "4",
-      unit: "人",
-    },
-  ],
-  price: "10000",
-  layout: ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"],
-  facility: [
-    "平面電視",
-    "吹風機",
-    "冰箱",
-    "熱水壺",
-    "檯燈",
-    "衣櫃",
-    "除濕機",
-    "浴缸",
-    "書桌",
-    "音響",
-  ],
-  toiletries: [
-    "衛生紙",
-    "沐浴用品",
-    "刮鬍刀",
-    "清潔用品",
-    "刷牙用品",
-    "刮鬍膏",
-    "吊衣架",
-    "浴袍",
-    "拖鞋",
-    "罐裝水",
-    "梳子",
-  ],
-  notice: `1.入住時間為下午3點，退房時間為上午12點。
-    2.如需延遲退房，請提前與櫃檯人員聯繫，視當日房況可能會產生額外費用。
-    3.請勿在房間內抽煙，若有抽煙需求，可以使用設在酒店各樓層的專用吸煙區。
-    4.若發現房間內的設施有損壞或遺失，將會按照價值收取賠償金。
-    5.請愛惜我們的房間與公共空間，並保持整潔。
-    6.如需額外的毛巾、盥洗用品或其他物品，請聯繫櫃檯。
-    7.我們提供免費的Wi-Fi，密碼可以在櫃檯或是房間內的資訊卡上找到。
-    8.請勿帶走酒店房內的物品，如有需要購買，請與我們的櫃檯人員聯繫。
-    9.我們提供24小時櫃檯服務，若有任何需求或疑問，歡迎隨時詢問。
-    10.為了確保所有客人的安全，請勿在走廊或公共區域大聲喧嘩，並遵守酒店的其他規定。`,
-});
+const { params } = useRoute();
+const roomInfo = ref<RoomType>();
+// {
+// id: 1,
+// title: "尊爵雙人房",
+// description:
+//   "享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。",
+// imgs: ["room2-1.png"],
+// info: [
+//   {
+//     icon: "mdi-arrow-expand",
+//     num: "24",
+//     unit: "坪",
+//   },
+//   {
+//     icon: "mdi-bed",
+//     num: "1",
+//     unit: "張大床",
+//   },
+//   {
+//     icon: "mdi-account",
+//     num: "2-4",
+//     maxNum: "4",
+//     unit: "人",
+//   },
+// ],
+// price: "10000",
+// layout: ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"],
+// facility: [
+//   "平面電視",
+//   "吹風機",
+//   "冰箱",
+//   "熱水壺",
+//   "檯燈",
+//   "衣櫃",
+//   "除濕機",
+//   "浴缸",
+//   "書桌",
+//   "音響",
+// ],
+// toiletries: [
+//   "衛生紙",
+//   "沐浴用品",
+//   "刮鬍刀",
+//   "清潔用品",
+//   "刷牙用品",
+//   "刮鬍膏",
+//   "吊衣架",
+//   "浴袍",
+//   "拖鞋",
+//   "罐裝水",
+//   "梳子",
+// ],
+// }
+
 const bookingList = ref<HTMLElement | null>(null);
 const bookingWrap = ref<HTMLElement | null>(null);
 const fixedBookingList = ref(false);
@@ -169,6 +175,44 @@ const getBookingWrapWidth = (): number => {
   return width;
 };
 
+const getRooms = async () => {
+  try {
+    const res = await _axios.get(`/rooms/${params.id}`);
+    console.log({ res });
+    roomInfo.value = res.data.data;
+    if (roomInfo.value) {
+      // roomInfo.value.layout = ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"];
+      roomInfo.value.layout = [
+        {
+          title: "市景",
+          isProvide: true,
+        },
+        {
+          title: "獨立衛浴",
+          isProvide: true,
+        },
+        {
+          title: "客廳",
+          isProvide: true,
+        },
+        {
+          title: "書房",
+          isProvide: false,
+        },
+        {
+          title: "樓層電梯",
+          isProvide: true,
+        },
+      ];
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+onMounted(() => {
+  getRooms();
+});
+
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
   bookingPosition.value = {
@@ -183,7 +227,7 @@ onUnmounted(() => {
 
 <style scoped lang="scss">
 .roomTitle {
-  @apply tw-text-h5 tw-mt-20 tw-pl-4 tw-border-l-4 tw-border-primary-100;
+  @apply tw-mt-20 tw-pl-4 tw-border-l-4 tw-border-primary-100;
 }
 .fixedBooking {
   width: var(--bookingWrapWidth);
@@ -194,3 +238,38 @@ onUnmounted(() => {
   z-index: 10;
 }
 </style>
+<!-- {
+  "status": true,
+  "data": {
+      "_id": "659679a318be02c00c255bc0",
+      "name": "尊爵雙人房",
+      "description": "享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。",
+      "imageUrl": "https://fakeimg.pl/300/",
+      "imageUrlList": [
+          "https://fakeimg.pl/300/",
+          "https://fakeimg.pl/301/",
+          "https://fakeimg.pl/302/"
+      ],
+      "areaInfo": "24坪",
+      "bedInfo": "一張大床",
+      "maxPeople": 4,
+      "price": 10000,
+      "facilityInfo": [
+          {
+              "title": "平面電視",
+              "isProvide": true
+          }
+      ],
+      "amenityInfo": [
+          {
+              "title": "衛生紙",
+              "isProvide": true
+          }
+      ],
+      "status": 1,
+      "creator": "658f9c76b2b2db227d53a287",
+      "createdAt": "2024-01-04T09:25:55.208Z",
+      "updatedAt": "2024-01-04T09:25:55.208Z"
+  },
+  "message": "取得單一房型"
+} -->

@@ -4,10 +4,10 @@
       <h5 class="tw-text-h5">預訂房型</h5>
       <hr class="tw-my-4" />
       <h2 class="tw-text-h3 xl:tw-text-h2 tw-mb-2">
-        {{ roomInfo.title }}
+        {{ roomInfo?.name }}
       </h2>
       <p class="tw-text-body tw-text-black-80 tw-mb-10">
-        {{ roomInfo.description }}
+        {{ roomInfo?.description }}
       </p>
       <div class="tw-flex tw-gap-4">
         <v-text-field
@@ -47,7 +47,7 @@
         </div>
       </div>
       <div class="tw-text-h5 tw-text-primary-100 tw-mb-10">
-        NT$ {{ roomInfo.price }}
+        NT$ {{ roomInfo?.price ? roomInfo?.price * nights : "0" }}
       </div>
       <BtnNormal
         text="立即預定"
@@ -59,7 +59,7 @@
       <v-card class="pt-10 pb-8 px-10" style="border-radius: 20px">
         <div class="tw-flex tw-mb-4">
           <div class="tw-flex-1">
-            <p class="tw-text-h5 tw-mb-2">{{ nights }}晚</p>
+            <p class="tw-text-h5 tw-mb-2">{{ tempNights }}晚</p>
             <p class="tw-text-body">
               {{ dateFormat(selectedDate[0]) }} -
               {{ dateFormat(selectedDate[selectedDate.length - 1]) }}
@@ -119,27 +119,25 @@ import { useRoute, useRouter } from "vue-router";
 import BtnNormal from "../BtnNormal.vue";
 import { useHelper } from "@/utils/useHelper";
 import useSnackbarStore from "@/store/snackbarStore";
+import type { RoomType } from "@/types";
 
 const snackbarStore = useSnackbarStore();
 const { dateFormat } = useHelper();
 const router = useRouter();
 const { params } = useRoute();
 
-const porps = defineProps({
-  roomInfo: {
-    type: Object,
-    required: true,
-  },
-});
+const porps = defineProps<{ roomInfo: RoomType | undefined }>();
 
+// People
 const booingData = ref({
   num: 2,
 });
 const maxNum = computed(() => {
-  let maxNum = porps.roomInfo.info.find((item) => item.maxNum).maxNum || 4;
-  if (booingData.value.num >= maxNum) return true;
+  let max = porps.roomInfo?.maxPeople || 4;
+  if (booingData.value.num >= max) return true;
   else return false;
 });
+// Date
 const minDate = computed(() => {
   let d = new Date();
   return new Date(d.setDate(d.getDate() - 1));
@@ -148,7 +146,8 @@ const datePicker = ref(false);
 const checkinDate = ref();
 const checkoutDate = ref();
 const selectedDate = ref<Date[]>([]);
-const nights = computed(() => {
+const nights = ref(0);
+const tempNights = computed(() => {
   let sd = selectedDate.value[0];
   let ed = selectedDate.value[selectedDate.value.length - 1];
   if (!sd || !ed) return 0;
@@ -163,6 +162,7 @@ const dateSubmit = () => {
   checkinDate.value = selectedDate.value[0];
   checkoutDate.value = selectedDate.value[selectedDate.value.length - 1];
   datePicker.value = false;
+  nights.value = tempNights.value;
 };
 const clearDate = () => {
   selectedDate.value = [];
@@ -172,20 +172,19 @@ const clearDate = () => {
 const openDatePicker = () => {
   datePicker.value = true;
   if (checkinDate.value && checkoutDate.value) {
-    //製作一個新陣列，從checkinDate.value到checkoutDate.value
-    selectedDate.value = [
-      ...Array(
-        Math.floor(
-          checkoutDate.value.getTime() -
-            (checkinDate.value.getTime() / 1000) * 60 * 60 * 24
-        ) + 1
-      ),
-    ].map((_, idx) => {
+    const numDays = Math.floor(
+      (checkoutDate.value.getTime() - checkinDate.value.getTime()) /
+        (1000 * 60 * 60 * 24) +
+        1
+    );
+
+    // 製作一個新陣列，從checkinDate.value到checkoutDate.value
+    selectedDate.value = Array.from({ length: numDays }, (_, idx) => {
       return new Date(checkinDate.value.getTime() + idx * 86400000);
     });
   }
 };
-
+// Submit
 const bookingSubmit = () => {
   console.log("bookingSubmit");
   if (!checkinDate.value || !checkoutDate.value) {
