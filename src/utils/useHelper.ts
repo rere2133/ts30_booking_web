@@ -8,7 +8,7 @@ export function useHelper(){
     else return 'web'
   })
   const getImageUrl = (fileName:string):string=>{
-    return `/imgs/${img_host[webOrMobile.value]}/${fileName}`
+    return `./imgs/${img_host[webOrMobile.value]}/${fileName}`
   }
   const dateFormat = (date:Date):string=>{
     if(!date) return ''
