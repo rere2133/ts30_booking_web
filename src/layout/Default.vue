@@ -1,17 +1,8 @@
 <template>
   <v-app>
-    <v-app-bar
-      class="tw-px-[16px] lg:tw-px-[80px] tw-py-6"
-      flat
-      color="transparent"
-    >
+    <v-app-bar class="tw-px-[16px] lg:tw-px-[80px] tw-py-6" flat color="transparent">
       <template #title>
-        <v-img
-          max-width="200"
-          class="tw-cursor-pointer"
-          :src="getImageUrl('logo.png')"
-          @click="router.push('/')"
-        ></v-img>
+        <v-img max-width="200" class="tw-cursor-pointer" :src="getImageUrl('logo.png')" @click="router.push('/')"></v-img>
       </template>
       <template #append>
         <div v-if="webOrMobile == 'web'" class="tw-flex tw-items-center">
@@ -22,10 +13,7 @@
             >
               <router-link :to="link.path">{{ link.title }}</router-link>
             </div>
-            <p
-              v-else-if="link.path == '/member'"
-              class="mr-8 tw-text-md tw-font-bold tw-cursor-pointer"
-            >
+            <p v-else-if="link.path == '/member'" class="mr-8 tw-text-md tw-font-bold tw-cursor-pointer">
               {{ link.title }}
               <v-menu activator="parent">
                 <v-list min-width="250">
@@ -34,9 +22,7 @@
                     :key="index"
                     :value="index"
                     class="memberActive"
-                    @click="
-                      item.title == '會員資料' ? toPage(item.path) : logout()
-                    "
+                    @click="item.title == '會員資料' ? toPage(item.path) : logout()"
                   >
                     <v-list-item-title>
                       {{ item.title }}
@@ -45,27 +31,12 @@
                 </v-list>
               </v-menu>
             </p>
-            <router-link
-              v-else
-              :to="link.path"
-              class="mr-8 tw-text-md tw-font-bold"
-              >{{ link.title }}</router-link
-            >
+            <router-link v-else :to="link.path" class="mr-8 tw-text-md tw-font-bold">{{ link.title }}</router-link>
           </div>
         </div>
         <div v-else>
-          <v-icon
-            v-if="!showOverlay"
-            @click="showOverlay = true"
-            icon="mdi-menu"
-            class="tw-pr-4"
-          />
-          <v-icon
-            v-else
-            @click="showOverlay = false"
-            icon="mdi-close"
-            class="tw-pr-4"
-          />
+          <v-icon v-if="!showOverlay" @click="showOverlay = true" icon="mdi-menu" class="tw-pr-4" />
+          <v-icon v-else @click="showOverlay = false" icon="mdi-close" class="tw-pr-4" />
         </div>
       </template>
     </v-app-bar>
@@ -74,9 +45,7 @@
         <router-view></router-view>
       </div>
     </v-main>
-    <v-footer
-      class="tw-px-[16px] tw-py-[80px] md:tw-pb-[120px] lg:tw-px-[80px] tw-bg-black-bg"
-    >
+    <v-footer class="tw-px-[16px] tw-py-[80px] md:tw-pb-[120px] lg:tw-px-[80px] tw-bg-black-bg">
       <Footer></Footer>
     </v-footer>
     <transition name="fade">
@@ -84,11 +53,7 @@
         <!-- overlay 内容放在这里 -->
         <div class="overlay-content">
           <v-list bg-color="transparent" class="text-center tw-w-full">
-            <v-list-item
-              v-for="link in appStore.navItems"
-              :key="link.path"
-              class="tw-py-8"
-            >
+            <v-list-item v-for="link in appStore.navItems" :key="link.path" class="tw-py-8">
               <div
                 v-if="link.title == '立即訂房'"
                 class="tw-text-md tw-font-bold tw-text-white tw-bg-primary-100 tw-py-4 tw-w-[90%] tw-mx-auto tw-rounded-lg tw-cursor-pointer hover:tw-bg-primary-80 tw-transition-all"
@@ -96,9 +61,7 @@
               >
                 {{ link.title }}
               </div>
-              <p v-else-if="link.path == '/member'" class="tw-text-title">
-                {{ link.title }}123
-              </p>
+              <p v-else-if="link.path == '/member'" class="tw-text-title">{{ link.title }}123</p>
               <p v-else class="tw-text-title" @click="toPage(link.path)">
                 {{ link.title }}
               </p>
@@ -111,7 +74,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, computed, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
 import Footer from "@/components/Footer.vue";

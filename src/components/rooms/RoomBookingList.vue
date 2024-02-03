@@ -29,31 +29,13 @@
       <div class="tw-flex tw-items-center tw-mb-10">
         <div>人數</div>
         <div class="tw-ml-auto">
-          <v-btn
-            @click="booingData.num--"
-            icon="mdi-minus"
-            variant="outlined"
-            color="black80"
-            :disabled="booingData.num <= 1"
-          ></v-btn>
+          <v-btn @click="booingData.num--" icon="mdi-minus" variant="outlined" color="black80" :disabled="booingData.num <= 1"></v-btn>
           <span class="tw-mx-4 tw-text-h6">{{ booingData.num }}</span>
-          <v-btn
-            @click="booingData.num++"
-            icon="mdi-plus"
-            variant="outlined"
-            color="black80"
-            :disabled="maxNum"
-          ></v-btn>
+          <v-btn @click="booingData.num++" icon="mdi-plus" variant="outlined" color="black80" :disabled="maxNum"></v-btn>
         </div>
       </div>
-      <div class="tw-text-h5 tw-text-primary-100 tw-mb-10">
-        NT$ {{ roomInfo?.price ? roomInfo?.price * nights : "0" }}
-      </div>
-      <BtnNormal
-        text="立即預定"
-        @action="bookingSubmit"
-        :disabled="!checkinDate || !checkoutDate"
-      />
+      <div class="tw-text-h5 tw-text-primary-100 tw-mb-10">NT$ {{ roomInfo?.price ? roomInfo?.price * nights : "0" }}</div>
+      <BtnNormal text="立即預定" @action="bookingSubmit" :disabled="!checkinDate || !checkoutDate" />
     </div>
     <v-dialog v-model="datePicker" width="600">
       <v-card class="pt-10 pb-8 px-10" style="border-radius: 20px">
@@ -66,17 +48,10 @@
             </p>
           </div>
           <div class="tw-flex tw-flex-1 tw-gap-3">
-            <v-text-field
-              label="入住"
-              :model-value="dateFormat(selectedDate[0]) || ''"
-              readonly
-              variant="outlined"
-            ></v-text-field>
+            <v-text-field label="入住" :model-value="dateFormat(selectedDate[0]) || ''" readonly variant="outlined"></v-text-field>
             <v-text-field
               label="退房"
-              :model-value="
-                dateFormat(selectedDate[selectedDate.length - 1]) || ''
-              "
+              :model-value="dateFormat(selectedDate[selectedDate.length - 1]) || ''"
               readonly
               variant="outlined"
             ></v-text-field>
@@ -95,18 +70,8 @@
         </v-date-picker>
         <div class="tw-flex tw-items-center">
           <v-spacer></v-spacer>
-          <v-btn variant="text" color="primary" @click="clearDate"
-            >清除日期</v-btn
-          >
-          <v-btn
-            color="primary"
-            variant="flat"
-            height="56"
-            min-width="130"
-            rounded="lg"
-            @click="dateSubmit"
-            >確認日期</v-btn
-          >
+          <v-btn variant="text" color="primary" @click="clearDate">清除日期</v-btn>
+          <v-btn color="primary" variant="flat" height="56" min-width="130" rounded="lg" @click="dateSubmit">確認日期</v-btn>
         </div>
       </v-card>
     </v-dialog>
@@ -172,11 +137,7 @@ const clearDate = () => {
 const openDatePicker = () => {
   datePicker.value = true;
   if (checkinDate.value && checkoutDate.value) {
-    const numDays = Math.floor(
-      (checkoutDate.value.getTime() - checkinDate.value.getTime()) /
-        (1000 * 60 * 60 * 24) +
-        1
-    );
+    const numDays = Math.floor((checkoutDate.value.getTime() - checkinDate.value.getTime()) / (1000 * 60 * 60 * 24) + 1);
 
     // 製作一個新陣列，從checkinDate.value到checkoutDate.value
     selectedDate.value = Array.from({ length: numDays }, (_, idx) => {
