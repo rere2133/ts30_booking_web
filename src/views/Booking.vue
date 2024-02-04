@@ -3,7 +3,7 @@
     <div class="container">
       <v-row>
         <v-col cols="12" md="8">
-          <v-btn variant="text">
+          <v-btn variant="text" @click="router.back()">
             <v-icon icon="mdi-chevron-left" size="44"></v-icon>
             <div class="tw-text-h3">確認訂房資訊</div>
           </v-btn>
@@ -11,10 +11,14 @@
           <div class="tw-flex tw-mb-4">
             <div>
               <div class="bookingTitle">選擇房型</div>
-              <p>尊爵雙人房</p>
+              <p>{{ bookingRoomData?.name }}</p>
             </div>
             <div class="tw-ml-auto">
-              <v-btn variant="text" class="tw-underline tw-underline-offset-2">
+              <v-btn
+                variant="text"
+                class="tw-underline tw-underline-offset-2"
+                @click="router.back()"
+              >
                 編輯
               </v-btn>
             </div>
@@ -22,11 +26,15 @@
           <div class="tw-flex tw-mb-4">
             <div>
               <div class="bookingTitle">訂房日期</div>
-              <p>入住：12 月 4 日星期二</p>
-              <p>退房：12 月 6 日星期三</p>
+              <p>入住：{{ dateToChinese(bookingRoomData?.checkInDate) }}</p>
+              <p>退房：{{ dateToChinese(bookingRoomData?.checkOutDate) }}</p>
             </div>
             <div class="tw-ml-auto">
-              <v-btn variant="text" class="tw-underline tw-underline-offset-2">
+              <v-btn
+                variant="text"
+                class="tw-underline tw-underline-offset-2"
+                @click="router.back()"
+              >
                 編輯
               </v-btn>
             </div>
@@ -34,10 +42,14 @@
           <div class="tw-flex">
             <div>
               <div class="bookingTitle">房客人數</div>
-              <p>2 人</p>
+              <p>{{ bookingRoomData?.peopleNum }} 人</p>
             </div>
             <div class="tw-ml-auto">
-              <v-btn variant="text" class="tw-underline tw-underline-offset-2">
+              <v-btn
+                variant="text"
+                class="tw-underline tw-underline-offset-2"
+                @click="router.back()"
+              >
                 編輯
               </v-btn>
             </div>
@@ -48,46 +60,72 @@
             label="姓名"
             placeholder="請輸入姓名"
             class="tw-mb-4"
-            v-model="bookingInfo.name"
+            v-model="userInfo.name"
           />
           <TextField
             label="手機號碼"
             placeholder="請輸入手機號碼"
             class="tw-mb-4"
-            v-model="bookingInfo.name"
+            v-model="userInfo.phone"
           />
           <TextField
             label="電子信箱"
             placeholder="請輸入電子信箱"
             class="tw-mb-4"
-            v-model="bookingInfo.name"
+            v-model="userInfo.email"
           />
-          <!-- TODO:地區資料 -->
           <div class="tw-flex tw-items-end tw-gap-4">
-            <SelectInput label="地址" placeholder="縣市" class="tw-flex-1" />
-            <SelectInput placeholder="區域" class="tw-flex-1" />
+            <SelectInput
+              v-model="userInfo.address.city"
+              :items="cityItems"
+              label="地址"
+              placeholder="縣市"
+              class="tw-flex-1"
+            />
+            <SelectInput
+              v-model="userInfo.address.county"
+              :items="countyItems"
+              :disabled="countyItems.length === 0"
+              placeholder="區域"
+              class="tw-flex-1"
+              item-title="AreaName"
+              item-value="AreaName"
+            />
           </div>
-          <TextField placeholder="請輸入詳細地址" class="tw-mb-4" />
+          <TextField
+            placeholder="請輸入詳細地址"
+            class="tw-mb-4"
+            v-model="userInfo.address.detail"
+          />
           <hr class="gb-divider tw-bg-black-bg tw-my-10" />
           <div class="tw-text-h4 tw-my-6">房間資訊</div>
           <RoomInfoZone :roomInfo="roomStore.roomInfo" />
         </v-col>
-        <v-col class="tw-hidden lg:tw-block blockEle tw-w-[400px]">
+        <v-col class="blockEle tw-w-[400px]">
           <div ref="blockList">
             <div
               class="tw-bg-white tw-p-8 tw-rounded-[20px] tw-shadow-lg tw-mb-6"
               :class="`${fixedBlock ? 'fixedBooking' : ''}`"
             >
+              <img
+                :src="bookingRoomData?.imageUrl"
+                class="tw-w-full tw-h-[200px] tw-object-cover tw-rounded-[20px] tw-mb-4"
+              />
+
               <h4 class="tw-text-h4 tw-mb-6">價格詳情</h4>
               <div class="tw-flex">
-                <div>NT$ 1000 * 2</div>
-                <div class="tw-ml-auto">NT$ 2000</div>
+                <div>
+                  NT$ {{ roomStore.roomInfo?.price }} *
+                  {{ bookingRoomData?.nights }}
+                </div>
+                <div class="tw-ml-auto">NT$ {{ totalPrice }}</div>
               </div>
               <hr class="gb-divider tw-bg-black-80 tw-my-10" />
-              <div class="tw-flex tw-font-bold">
+              <div class="tw-flex tw-font-bold tw-mb-6">
                 <div>總價</div>
-                <div class="tw-ml-auto">NT$ 2000</div>
+                <div class="tw-ml-auto">NT$ {{ totalPrice }}</div>
               </div>
+              <BtnNormal text="確認訂房" @action="confirmBooking" />
             </div>
           </div>
         </v-col>
@@ -102,24 +140,89 @@ import TextField from "@/components/input/TextField.vue";
 import SelectInput from "@/components/input/SelectInput.vue";
 import RoomInfoZone from "@/components/rooms/RoomInfoZone.vue";
 import useRoomStore from "@/store/roomStore";
+import BtnNormal from "@/components/BtnNormal.vue";
 import { useFixedBlock } from "@/utils/useFixedBlock";
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { useRoute, useRouter } from "vue-router";
+import { useHelper } from "@/utils/useHelper";
+import { CityCountyData } from "@/utils/CityCountyData";
+import type { AreaType } from "@/types";
+import { useHttp } from "@/plugins/httpAxios";
 
+const router = useRouter();
+const { params } = useRoute();
 const roomStore = useRoomStore();
-const { blockList, blockPosition, fixedBlock, setBlockPosition, handleScroll } =
+const { _axios } = useHttp();
+const { bookingRoomData } = storeToRefs(roomStore);
+const { dateToChinese, dateFormat } = useHelper();
+const { blockList, fixedBlock, setBlockPosition, handleScroll } =
   useFixedBlock();
-const bookingInfo = ref({
-  name: "",
-  email: "",
-  phone: "",
+const userInfo = ref({
+  name: "RRR",
+  email: "abc@gmail.com",
+  phone: "0911112223",
+  address: {
+    zipcode: 0,
+    detail: "",
+    county: "",
+    city: "",
+  },
+});
+const cityItems = computed(() => {
+  return CityCountyData.map((item) => item.CityName);
+});
+const countyItems = ref<AreaType[]>([]);
+watch(
+  () => userInfo.value.address.city,
+  (city) => {
+    if (city) {
+      userInfo.value.address.county = "";
+      const cityData = CityCountyData.find((item) => item.CityName === city);
+      countyItems.value = cityData?.AreaList || [];
+    }
+  }
+);
+const totalPrice = computed(() => {
+  if (roomStore.roomInfo?.price && bookingRoomData.value?.nights) {
+    return roomStore.roomInfo.price * bookingRoomData.value.nights;
+  } else {
+    return "-";
+  }
+});
+const confirmBooking = async () => {
+  //TODO: validate payload
+  let zipcode = countyItems.value.find(
+    (item) => item?.AreaName === userInfo.value.address.county
+  )?.ZipCode;
+  userInfo.value.address.zipcode = zipcode ? +zipcode : 0;
+  let payload = {
+    roomId: params.id,
+    checkInDate: dateFormat(bookingRoomData.value?.checkInDate),
+    checkOutDate: dateFormat(bookingRoomData.value?.checkOutDate),
+    peopleNum: bookingRoomData.value?.peopleNum,
+    userInfo: userInfo.value,
+  };
+  console.log({ payload });
+  try {
+    const res = await _axios.post("/orders", payload);
+    console.log({ res });
+    if (res.status) {
+      router.push({ name: "BookSucceed" });
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+onMounted(() => {
+  if (!bookingRoomData.value?.name) {
+    router.back();
+  }
 });
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
-  // bookingPosition.value = {
-  //   offsetTop: bookingList.value!.offsetTop,
-  //   offsetLeft: bookingList.value!.offsetLeft,
-  // };
   setBlockPosition(blockList.value!.offsetTop, blockList.value!.offsetLeft);
 });
 onUnmounted(() => {

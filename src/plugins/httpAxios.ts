@@ -14,7 +14,7 @@ export const useHttp = ()=>{
   
   _axios.interceptors.request.use(
     (config) => {
-    const token = localStorage.getItem("access");
+    const token = localStorage.getItem("auth_token");
     if (token) {
       config.headers.Authorization = token;
     }
@@ -36,7 +36,7 @@ export const useHttp = ()=>{
       }
       setSnackBar({
         color: 'error',
-        message: `${err.response.status} : ${err.response.message}`,
+        message: `${err.response.data.status} : ${err.response.data.message}`,
         isOpen: true
       });
       return Promise.reject(err);

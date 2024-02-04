@@ -1,3 +1,4 @@
+import { CityCountyData } from './utils/CityCountyData';
 export type RoomInfo= {
   title: string;
   isProvide: boolean;
@@ -20,4 +21,39 @@ export type RoomType = {
   creator: string;
   createdAt: string;
   updatedAt: string;
+}
+export type bookingRoomData = {
+  name: string;
+  checkInDate: Date;
+  checkOutDate: Date;
+  peopleNum: number;
+  imageUrl: string;
+  nights: number;
+}
+export type BookingSubmitData = {
+  roomId: string;
+  checkInDate: Date;
+  checkOutDate: Date;
+  peopleNum: number;
+  userInfo: {
+    address: {
+      zipcode: number;
+      detail: string;
+      county: string;
+      city: string;
+    };
+    name: string;
+    email: string;
+    phone: string;
+  };
+}
+export type AreaType = {
+  ZipCode: string;
+  AreaName: string;
+  AreaEngName?: string;
+}
+export type CityCountyData = {
+  CityName: string;
+  CityEngName?: string;
+  AreaList: AreaType[];
 }

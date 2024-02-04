@@ -10,9 +10,14 @@ export function useHelper(){
   const getImageUrl = (fileName:string):string=>{
     return `./imgs/${img_host[webOrMobile.value]}/${fileName}`
   }
-  const dateFormat = (date:Date):string=>{
+  const dateFormat = (date:Date|undefined):string=>{
     if(!date) return ''
     return `${date.getFullYear()}/${date.getMonth()+1}/${date.getDate()}`
+  }
+  const dateToChinese = (date:Date|undefined):string=>{
+    if(!date) return ''
+    const week = ['日','一','二','三','四','五','六']
+    return `${date.getMonth()+1}月${date.getDate()}日 星期${week[date.getDay()]}`
   }
   const clearLocalStorage = ()=>{
     localStorage.clear()
@@ -22,6 +27,7 @@ export function useHelper(){
     webOrMobile,
     getImageUrl,
     dateFormat,
+    dateToChinese,
     clearLocalStorage
   }
 }

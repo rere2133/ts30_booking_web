@@ -1,11 +1,15 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import type { RoomType} from '@/types';
+import type { RoomType,bookingRoomData,BookingSubmitData} from '@/types';
 
 export default defineStore('useRoomStore', () => {
-  const roomInfo = ref<RoomType | undefined>({})
+  const roomInfo = ref<RoomType | undefined>()
+  const bookingRoomData = ref<bookingRoomData | undefined>()
+  const bookingSubmitData = ref<BookingSubmitData | undefined>()
   return {
-    roomInfo
+    roomInfo,
+    bookingRoomData,
+    bookingSubmitData
   }
 })
 // const roomInfo = ref<RoomType>();

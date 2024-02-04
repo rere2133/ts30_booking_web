@@ -1,8 +1,11 @@
 <template>
   <div class="tw-bg-white tw-rounded-xl tw-p-6 tw-flex tw-gap-4 tw-flex-wrap">
     <div v-for="(item, idx) in items" :key="idx">
-      <div v-if="item.isProvide" class="tw-flex">
-        <v-icon icon="mdi-check" color="primary"></v-icon>
+      <div class="tw-flex">
+        <v-icon
+          :icon="item.isProvide ? 'mdi-check' : 'mdi-close'"
+          color="primary"
+        ></v-icon>
         <p class="tw-pl-1 tw-whitespace-nowrap">{{ item.title }}</p>
       </div>
     </div>

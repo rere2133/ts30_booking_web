@@ -12,14 +12,14 @@
       <div class="tw-flex tw-gap-4">
         <v-text-field
           @click="openDatePicker"
-          :model-value="dateFormat(checkinDate)"
+          :model-value="dateFormat(checkInDate)"
           label="入住"
           readonly
           variant="outlined"
         ></v-text-field>
         <v-text-field
           @click="openDatePicker"
-          :model-value="dateFormat(checkoutDate)"
+          :model-value="dateFormat(checkOutDate)"
           label="退房"
           readonly
           variant="outlined"
@@ -30,16 +30,16 @@
         <div>人數</div>
         <div class="tw-ml-auto">
           <v-btn
-            @click="booingData.num--"
+            @click="peopleNum--"
             icon="mdi-minus"
             variant="outlined"
             color="black80"
             size="small"
-            :disabled="booingData.num <= 1"
+            :disabled="peopleNum <= 1"
           ></v-btn>
-          <span class="tw-mx-4 tw-text-h6">{{ booingData.num }}</span>
+          <span class="tw-mx-4 tw-text-h6">{{ peopleNum }}</span>
           <v-btn
-            @click="booingData.num++"
+            @click="peopleNum++"
             icon="mdi-plus"
             variant="outlined"
             color="black80"
@@ -54,7 +54,7 @@
       <BtnNormal
         text="立即預定"
         @action="bookingSubmit"
-        :disabled="!checkinDate || !checkoutDate"
+        :disabled="!checkInDate || !checkOutDate"
       />
     </div>
     <v-dialog v-model="datePicker" width="600">
@@ -121,9 +121,11 @@ import { useRoute, useRouter } from "vue-router";
 import BtnNormal from "../BtnNormal.vue";
 import { useHelper } from "@/utils/useHelper";
 import useSnackbarStore from "@/store/snackbarStore";
+import useRoomStore from "@/store/roomStore";
 import type { RoomType } from "@/types";
 
 const snackbarStore = useSnackbarStore();
+const roomStore = useRoomStore();
 const { dateFormat } = useHelper();
 const router = useRouter();
 const { params } = useRoute();
@@ -131,20 +133,18 @@ const { params } = useRoute();
 const props = defineProps<{ roomInfo: RoomType | undefined }>();
 
 // People
-const booingData = ref({
-  num: 2,
-});
+// const bookingData = ref({
+//   num: 2,
+// });
+const peopleNum = ref(2);
 const maxNum = computed(() => {
   let max = props.roomInfo?.maxPeople || 4;
-  if (booingData.value.num >= max) return true;
+  if (peopleNum.value >= max) return true;
   else return false;
 });
 onMounted(() => {
-  if (
-    props.roomInfo?.maxPeople &&
-    booingData.value.num > props.roomInfo?.maxPeople
-  )
-    booingData.value.num = props.roomInfo?.maxPeople || 1;
+  if (props.roomInfo?.maxPeople && peopleNum.value > props.roomInfo?.maxPeople)
+    peopleNum.value = props.roomInfo?.maxPeople || 1;
 });
 // Date
 const minDate = computed(() => {
@@ -152,8 +152,8 @@ const minDate = computed(() => {
   return new Date(d.setDate(d.getDate() - 1));
 });
 const datePicker = ref(false);
-const checkinDate = ref();
-const checkoutDate = ref();
+const checkInDate = ref();
+const checkOutDate = ref();
 const selectedDate = ref<Date[]>([]);
 const nights = ref(0);
 const tempNights = computed(() => {
@@ -168,8 +168,8 @@ const tempNights = computed(() => {
   // );
 });
 const dateSubmit = () => {
-  checkinDate.value = selectedDate.value[0];
-  checkoutDate.value = selectedDate.value[selectedDate.value.length - 1];
+  checkInDate.value = selectedDate.value[0];
+  checkOutDate.value = selectedDate.value[selectedDate.value.length - 1];
   datePicker.value = false;
   nights.value = tempNights.value;
 };
@@ -180,23 +180,23 @@ const clearDate = () => {
 
 const openDatePicker = () => {
   datePicker.value = true;
-  if (checkinDate.value && checkoutDate.value) {
+  if (checkInDate.value && checkOutDate.value) {
     const numDays = Math.floor(
-      (checkoutDate.value.getTime() - checkinDate.value.getTime()) /
+      (checkOutDate.value.getTime() - checkInDate.value.getTime()) /
         (1000 * 60 * 60 * 24) +
         1
     );
 
     // 製作一個新陣列，從checkinDate.value到checkoutDate.value
     selectedDate.value = Array.from({ length: numDays }, (_, idx) => {
-      return new Date(checkinDate.value.getTime() + idx * 86400000);
+      return new Date(checkInDate.value.getTime() + idx * 86400000);
     });
   }
 };
 // Submit
 const bookingSubmit = () => {
   console.log("bookingSubmit");
-  if (!checkinDate.value || !checkoutDate.value) {
+  if (!checkInDate.value || !checkOutDate.value) {
     snackbarStore.setSnackBar({
       message: "請選擇入住日期",
       color: "error",
@@ -204,8 +204,25 @@ const bookingSubmit = () => {
     });
     return;
   }
+  roomStore.bookingRoomData = {
+    name: props.roomInfo?.name || "",
+    checkInDate: checkInDate.value,
+    checkOutDate: checkOutDate.value,
+    peopleNum: peopleNum.value,
+    imageUrl: props.roomInfo?.imageUrl || "",
+    nights: nights.value,
+  };
   router.push(`/booking/${params.id}`);
 };
+// init
+onMounted(() => {
+  if (roomStore.bookingRoomData != undefined) {
+    checkInDate.value = roomStore.bookingRoomData.checkInDate;
+    checkOutDate.value = roomStore.bookingRoomData.checkOutDate;
+    peopleNum.value = roomStore.bookingRoomData.peopleNum || 2;
+    nights.value = roomStore.bookingRoomData.nights;
+  }
+});
 </script>
 
 <style scoped lang="scss">
