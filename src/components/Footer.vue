@@ -3,12 +3,12 @@
     <div class="tw-mb-[40px] md:tw-mb-0">
       <v-img
         width="200"
-        src="/imgs/web/logo.png"
+        :src="getImageUrl('logo.png')"
         class="tw-mb-[40px]"
       ></v-img>
       <div class="icon-group">
-        <img class="tw-inline tw-p-[8px] tw-rounded-[20px] tw-border-[1px] tw-border-white tw-border-solid tw-mr-[16px]" src="/imgs/web/bi_line.svg" />
-        <img class="tw-inline tw-p-[8px] tw-rounded-[20px] tw-border-[1px] tw-border-white tw-border-solid" src="/imgs/web/bi_ins.svg" />
+        <img class="tw-inline tw-p-[8px] tw-rounded-[20px] tw-border-[1px] tw-border-white tw-border-solid tw-mr-[16px]" :src="getImageUrl('bi_line.svg')" />
+        <img class="tw-inline tw-p-[8px] tw-rounded-[20px] tw-border-[1px] tw-border-white tw-border-solid" :src="getImageUrl('bi_ins.svg')" />
       </div>
     </div>
     <div>
@@ -39,3 +39,7 @@
     </div>
   </div>
 </template>
+<script setup lang="ts">
+import { useHelper } from '@/utils/useHelper';
+const { getImageUrl } = useHelper();
+</script>

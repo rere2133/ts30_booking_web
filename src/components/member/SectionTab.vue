@@ -7,7 +7,10 @@
   </ul>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import {useRoute, useRouter} from "vue-router";
+const route = useRoute();
+const router = useRouter();
 interface SectionItem {
   id: string,
   label: string,
@@ -27,6 +30,15 @@ const emitActive = (item: SectionItem) => {
   activeItemValue.value = item.value;
   changeSectionEmit("change", item.value);
 }
+onMounted(() => {
+  let routeName = route.name;
+  if (routeName == 'Orders') {
+    activeItemValue.value = '0';
+  } else if (routeName == 'Profile') {
+    activeItemValue.value = '1';  
+  }
+});
+
 </script>
 <style lang="scss" scoped>
 .section-tab-item:hover {
