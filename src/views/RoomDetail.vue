@@ -13,7 +13,7 @@
       <div class="tw-aspect-[3/1] tw-rounded-[20px] tw-overflow-hidden tw-mb-8">
         <img
           class="tw-w-full tw-h-full tw-object-center tw-object-cover"
-          :src="roomInfo?.imageUrl"
+          :src="roomStore.roomInfo?.imageUrl"
         />
       </div>
     </div>
@@ -21,46 +21,20 @@
     <div class="container">
       <v-row>
         <v-col cols="12" md="8">
-          <h1 class="tw-text-h1 tw-mb-4">{{ roomInfo?.name }}</h1>
+          <h1 class="tw-text-h1 tw-mb-4">{{ roomStore.roomInfo?.name }}</h1>
           <p class="tw-text-body tw-text-black-80">
-            {{ roomInfo?.description }}
+            {{ roomStore.roomInfo?.description }}
           </p>
-          <div class="roomTitle tw-text-h5 tw-mb-6">房型基本資訊</div>
-          <div class="tw-flex tw-mt-8 tw-gap-2 md:tw-gap-4">
-            <RoomInfoCard
-              variant="solid"
-              icon="mdi-arrow-expand"
-              :info="roomInfo?.areaInfo"
-            />
-            <RoomInfoCard
-              variant="solid"
-              icon="mdi-bed"
-              :info="roomInfo?.bedInfo"
-            />
-            <RoomInfoCard
-              variant="solid"
-              icon="mdi-account"
-              :info="`${roomInfo?.maxPeople}人`"
-            />
-          </div>
-          <div class="roomTitle tw-text-h5 tw-mb-6">房間格局</div>
-          <RoomDetailCard :items="roomInfo?.layout" />
-          <div class="roomTitle tw-text-h5 tw-mb-6">房內設備</div>
-          <RoomDetailCard :items="roomInfo?.facilityInfo" />
-          <div class="roomTitle tw-text-h5 tw-mb-6">備品提供</div>
-          <RoomDetailCard :items="roomInfo?.amenityInfo" />
+          <RoomInfoZone :roomInfo="roomStore.roomInfo" />
           <div class="roomTitle tw-text-h5 tw-mb-6">訂房須知</div>
           <div class="tw-whitespace-pre-line tw-text-black-80 tw-leading-7">
             {{ roomNotice }}
           </div>
         </v-col>
-        <v-col
-          ref="bookingWrap"
-          class="tw-hidden lg:tw-block bookingWrap tw-w-[400px]"
-        >
+        <v-col ref="bookingWrap" class="bookingWrap tw-w-[400px]">
           <div ref="bookingList">
             <RoomBookingList
-              :roomInfo="roomInfo"
+              :roomInfo="roomStore.roomInfo"
               :class="`bookingList ${fixedBookingList ? 'fixedBooking' : ''}`"
             />
           </div>
@@ -74,72 +48,19 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import HomeContainer from "@/components/home/HomeContainer.vue";
-import RoomInfoCard from "@/components/rooms/RoomInfoCard.vue";
-import RoomDetailCard from "@/components/rooms/RoomDetailCard.vue";
+import RoomInfoZone from "@/components/rooms/RoomInfoZone.vue";
 import RoomBookingList from "@/components/rooms/RoomBookingList.vue";
-// import { useHelper } from "@/utils/useHelper";
 import { useHttp } from "@/plugins/httpAxios";
 import { roomNotice } from "@/utils/roomNotice";
-import type { RoomType } from "@/types";
+// import type { RoomType } from "@/types";
+import useRoomStore from "@/store/roomStore";
+import { useDisplay } from "vuetify";
 
 const { _axios } = useHttp();
-// const { getImageUrl } = useHelper();
+const { name } = useDisplay();
 const router = useRouter();
 const { params } = useRoute();
-const roomInfo = ref<RoomType>();
-// {
-// id: 1,
-// title: "尊爵雙人房",
-// description:
-//   "享受高級的住宿體驗，尊爵雙人房提供給您舒適寬敞的空間和精緻的裝潢。",
-// imgs: ["room2-1.png"],
-// info: [
-//   {
-//     icon: "mdi-arrow-expand",
-//     num: "24",
-//     unit: "坪",
-//   },
-//   {
-//     icon: "mdi-bed",
-//     num: "1",
-//     unit: "張大床",
-//   },
-//   {
-//     icon: "mdi-account",
-//     num: "2-4",
-//     maxNum: "4",
-//     unit: "人",
-//   },
-// ],
-// price: "10000",
-// layout: ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"],
-// facility: [
-//   "平面電視",
-//   "吹風機",
-//   "冰箱",
-//   "熱水壺",
-//   "檯燈",
-//   "衣櫃",
-//   "除濕機",
-//   "浴缸",
-//   "書桌",
-//   "音響",
-// ],
-// toiletries: [
-//   "衛生紙",
-//   "沐浴用品",
-//   "刮鬍刀",
-//   "清潔用品",
-//   "刷牙用品",
-//   "刮鬍膏",
-//   "吊衣架",
-//   "浴袍",
-//   "拖鞋",
-//   "罐裝水",
-//   "梳子",
-// ],
-// }
-
+const roomStore = useRoomStore();
 const bookingList = ref<HTMLElement | null>(null);
 const bookingWrap = ref<HTMLElement | null>(null);
 const fixedBookingList = ref(false);
@@ -148,7 +69,11 @@ const bookingPosition = ref({
   offsetLeft: 0,
 });
 const handleScroll = () => {
-  if (window.scrollY > bookingPosition.value!.offsetTop - 100) {
+  if (
+    window.scrollY > bookingPosition.value!.offsetTop - 100 &&
+    name.value !== "xs" &&
+    name.value !== "sm"
+  ) {
     fixedBookingList.value = true;
     let width = getBookingWrapWidth();
 
@@ -177,10 +102,10 @@ const getRooms = async () => {
   try {
     const res = await _axios.get(`/rooms/${params.id}`);
     console.log({ res });
-    roomInfo.value = res.data.data;
-    if (roomInfo.value) {
+    roomStore.roomInfo = res.data.data;
+    if (roomStore.roomInfo) {
       // roomInfo.value.layout = ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"];
-      roomInfo.value.layout = [
+      roomStore.roomInfo.layout = [
         {
           title: "市景",
           isProvide: true,

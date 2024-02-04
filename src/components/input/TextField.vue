@@ -1,8 +1,10 @@
 <template>
   <div>
-    <label class="tw-text-sm tw-font-bold tw-mb-1 tw-block">{{
-      $attrs.label
-    }}</label>
+    <label
+      v-if="$attrs.label"
+      class="tw-text-sm tw-font-bold tw-mb-1 tw-block"
+      >{{ $attrs.label }}</label
+    >
     <input
       v-bind="$attrs"
       :type="$attrs.type as InputTypeHTMLAttribute || 'text'"
