@@ -1,6 +1,7 @@
 import axios from 'axios';
 import useSnackbarStore from '@/store/snackbarStore';
 import pinia from '@/plugins/pinia';
+import { useAppStore } from '@/store/app';
 import { useRouter } from 'vue-router';
 
 export const useHttp = ()=>{
@@ -30,6 +31,10 @@ export const useHttp = ()=>{
     },
     (err) => {
       if ( router && err.response.status === 401) {
+        let appStore = useAppStore();
+        appStore.isLogin = false;
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("userName");
         router.push({
           name: 'Login',
         });
