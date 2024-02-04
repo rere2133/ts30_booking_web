@@ -12,7 +12,7 @@
             <div class="tw-mr-[16px] tw-flex-[1]">
               <p class="tw-mb-[8px] tw-text-black-80 tw-leading-[1.5] tw-font-[500] tw-tracking-[0.32px]">密碼</p>
               <p class="tw-flex tw-py-[8px]">
-                <template v-for="key in 8" :key="key">
+                <template v-for="_ in 8" :key="key">
                   <i class="tw-block tw-w-[8px] tw-h-[8px] tw-rounded-[4px] tw-bg-black-100 tw-mr-[8px]"></i>
                 </template>
               </p>
@@ -40,7 +40,12 @@
             <p class="tw-mb-[8px] tw-text-black-80 tw-leading-[1.5] tw-font-[500] tw-tracking-[0.32px]">地址</p>
             <p class="tw-font-[700] tw-leading-[1.5] tw-tracking-[0.32px]">高雄市新興區六角路 123 號</p>
           </div>
-          <button type="button" class="tw-py-[16px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100">編輯</button>
+          <button
+            type="button"
+            class="tw-py-[16px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100"
+          >
+            編輯
+          </button>
         </member-card>
       </div>
     </div>
@@ -48,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import MemberCard from '@/components/member/Card.vue';
+import MemberCard from "@/components/member/Card.vue";
 </script>
 
 <style scoped></style>
