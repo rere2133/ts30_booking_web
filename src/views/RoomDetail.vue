@@ -83,7 +83,7 @@ import { roomNotice } from "@/utils/roomNotice";
 import type { RoomType } from "@/types";
 
 const { _axios } = useHttp();
-const { getImageUrl } = useHelper();
+// const { getImageUrl } = useHelper();
 const router = useRouter();
 const { params } = useRoute();
 const roomInfo = ref<RoomType>();
