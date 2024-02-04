@@ -36,13 +36,13 @@
 import { watch } from "vue";
 import { useHelper } from "@/utils/useHelper";
 import HomeContainer from "./home/HomeContainer.vue";
-const { getImageUrl, webOrMobile } = useHelper();
+const { webOrMobile } = useHelper();
 watch(
   () => webOrMobile,
   () => {
     document.documentElement.style.setProperty(
       "--bgImg",
-      `url(${getImageUrl("banner.png")})`
+      `url(https://hotel-reservation-backend-sgtq.onrender.com/api/v1/url/c8c489bf)`
     );
   },
   { immediate: true }
