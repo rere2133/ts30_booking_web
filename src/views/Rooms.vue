@@ -63,9 +63,9 @@ const rooms = ref<RoomType[] | null>([
 ]);
 const getRooms = async () => {
   try {
-    const res = await _axios.get("/rooms/659679a318be02c00c255bc0");
+    const res = await _axios.get("/rooms");
     console.log({ res });
-    rooms.value = [res.data.data];
+    rooms.value = res.data.data;
   } catch (error) {
     console.log(error);
   }

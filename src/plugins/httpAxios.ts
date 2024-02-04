@@ -16,7 +16,7 @@ export const useHttp = ()=>{
     (config) => {
     const token = localStorage.getItem("access");
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = token;
     }
       return config;
     },

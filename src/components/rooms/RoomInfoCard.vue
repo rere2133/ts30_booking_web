@@ -1,6 +1,6 @@
 <template>
   <div
-    class="tw-w-[100px] tw-aspect-square tw-rounded-lg tw-p-4 md:tw-p-4"
+    class="tw-w-[120px] tw-aspect-square tw-rounded-lg tw-p-4 md:tw-p-4"
     :class="$attrs.variant === 'solid' ? 'solid' : 'outlined'"
   >
     <v-icon :icon="icon" color="primary" class="tw-mb-2"></v-icon>

@@ -10,12 +10,10 @@
       >
         <span class="tw-text-title">返回</span></v-btn
       >
-      <div
-        class="tw-aspect-[10/4] tw-rounded-[20px] tw-overflow-hidden tw-mb-8"
-      >
+      <div class="tw-aspect-[3/1] tw-rounded-[20px] tw-overflow-hidden tw-mb-8">
         <img
-          class="tw-w-full tw-h-full tw-object-left-bottom tw-object-none"
-          :src="getImageUrl('/room2-1.png')"
+          class="tw-w-full tw-h-full tw-object-center tw-object-cover"
+          :src="roomInfo?.imageUrl"
         />
       </div>
     </div>

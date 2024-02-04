@@ -10,7 +10,7 @@
     />
   </div>
 </template>
-
+https://discord.com/channels/1078516836733309028/1183630937842528357
 <script setup lang="ts"></script>
 
 <style scoped></style>

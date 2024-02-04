@@ -3,10 +3,10 @@
     <div class="tw-bg-white tw-rounded-[20px] tw-p-6 xl:tw-p-10">
       <h5 class="tw-text-h5">預訂房型</h5>
       <hr class="tw-my-4" />
-      <h2 class="tw-text-h3 xl:tw-text-h2 tw-mb-2">
+      <h2 class="tw-text-h4 xl:tw-text-h2 tw-mb-2">
         {{ roomInfo?.name }}
       </h2>
-      <p class="tw-text-body tw-text-black-80 tw-mb-10">
+      <p class="tw-text-tiny tw-text-black-80 tw-mb-6">
         {{ roomInfo?.description }}
       </p>
       <div class="tw-flex tw-gap-4">
@@ -26,7 +26,7 @@
         ></v-text-field>
       </div>
 
-      <div class="tw-flex tw-items-center tw-mb-10">
+      <div class="tw-flex tw-items-center tw-mb-8">
         <div>人數</div>
         <div class="tw-ml-auto">
           <v-btn
@@ -34,6 +34,7 @@
             icon="mdi-minus"
             variant="outlined"
             color="black80"
+            size="small"
             :disabled="booingData.num <= 1"
           ></v-btn>
           <span class="tw-mx-4 tw-text-h6">{{ booingData.num }}</span>
@@ -42,11 +43,12 @@
             icon="mdi-plus"
             variant="outlined"
             color="black80"
+            size="small"
             :disabled="maxNum"
           ></v-btn>
         </div>
       </div>
-      <div class="tw-text-h5 tw-text-primary-100 tw-mb-10">
+      <div class="tw-text-h6 tw-text-primary-100 tw-mb-6">
         NT$ {{ roomInfo?.price ? roomInfo?.price * nights : "0" }}
       </div>
       <BtnNormal
@@ -114,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import BtnNormal from "../BtnNormal.vue";
 import { useHelper } from "@/utils/useHelper";
@@ -126,16 +128,23 @@ const { dateFormat } = useHelper();
 const router = useRouter();
 const { params } = useRoute();
 
-const porps = defineProps<{ roomInfo: RoomType | undefined }>();
+const props = defineProps<{ roomInfo: RoomType | undefined }>();
 
 // People
 const booingData = ref({
   num: 2,
 });
 const maxNum = computed(() => {
-  let max = porps.roomInfo?.maxPeople || 4;
+  let max = props.roomInfo?.maxPeople || 4;
   if (booingData.value.num >= max) return true;
   else return false;
+});
+onMounted(() => {
+  if (
+    props.roomInfo?.maxPeople &&
+    booingData.value.num > props.roomInfo?.maxPeople
+  )
+    booingData.value.num = props.roomInfo?.maxPeople || 1;
 });
 // Date
 const minDate = computed(() => {
