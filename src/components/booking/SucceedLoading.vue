@@ -3,7 +3,7 @@
     <v-card class="tw-p-[50px] tw-min-h-[40vh] loadingCard">
       <div class="tw-w-[50%] tw-mx-auto loadingWrap">
         <img
-          :src="getImageUrl('logo_primary.png')"
+          src="https://hotel-reservation-backend-sgtq.onrender.com/api/v1/url/697aea64"
           class="tw-w-[100px] tw-mb-10 tw-block tw-mx-auto"
         />
         <v-progress-linear
