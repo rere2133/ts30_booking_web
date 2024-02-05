@@ -4,6 +4,7 @@
   <a href="./README.md"> English </a> | <a href="./README.zh-TW.md"> 繁體中文
   </a>
 </p>
+
 ## Hotel Introduction
 
 ![Alt text](image.png)
@@ -36,7 +37,7 @@ Whether you're traveling for business or leisure, we are dedicated to providing 
 
 ## Live Demo
 
-[Enjoyment Luxury Hotel](https://rere2133.github.io/ts30_booking_web)
+<a href="https://rere2133.github.io/ts30_booking_web" target="_blank">Enjoyment Luxury Hotel</a>
 
 ## Development Team
 

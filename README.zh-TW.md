@@ -4,6 +4,7 @@
   <a href="./README.md"> English </a> | <a href="./README.zh-TW.md"> 繁體中文
   </a>
 </p>
+
 ## 網站介紹
 
 ![Alt text](image.png)
@@ -37,7 +38,7 @@
 
 ## Live Demo
 
-[Enjoyment Luxury Hotel](https://rere2133.github.io/ts30_booking_web)
+<a href="https://rere2133.github.io/ts30_booking_web" target="_blank">Enjoyment Luxury Hotel</a>
 
 ## 開發團隊
 
