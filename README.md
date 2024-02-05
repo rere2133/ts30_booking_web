@@ -1,5 +1,9 @@
 # Ts30_booking_web 飯店訂房網站
 
+<p align="center">
+  <a href="./README.md"> English </a> | <a href="./README.zh-TW.md"> 繁體中文
+  </a>
+</p>
 ## Hotel Introduction
 
 ![Alt text](image.png)
