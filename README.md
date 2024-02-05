@@ -7,7 +7,8 @@
 
 ## Hotel Introduction
 
-![Alt text](image.png)
+![Alt text](./public/image.png)
+
 Welcome to our Enjoyment Luxury Hotel booking website, your ideal choice for accommodation!
 
 Here, we offer a variety of featured room types to meet your diverse needs and budget. Whether you're a traveler seeking luxurious indulgence or a budget-conscious guest, we have the perfect room types for you to confidently choose from. Below is an introduction to our carefully curated room categories:
@@ -23,7 +24,7 @@ Here, we offer a variety of featured room types to meet your diverse needs and b
 5. Absolute Insomnia Single Room: Ideal for solo travelers who prefer solitude and need to focus on work or contemplation, our Absolute Insomnia Single Room is the perfect choice. The comfortable environment and convenient facilities allow you to concentrate on work or relax in peace, enjoying moments of tranquility.
 
 <p align='center'>
-<img  src="image-2.png"/>
+<img  src="./public/image-2.png"/>
 </p>
 
 In addition, our booking and order management system is extremely convenient and user-friendly. You can easily check room availability and prices online, and make instant reservations. Once your booking is complete, you will receive a confirmation email with details of your order, enabling you to check your order status and manage your accommodation arrangements anytime, anywhere.

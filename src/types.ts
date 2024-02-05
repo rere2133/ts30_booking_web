@@ -22,6 +22,18 @@ export type RoomType = {
   createdAt: string;
   updatedAt: string;
 }
+export type userInfo = {
+  name: string;
+  email: string;
+  phone: string;
+  address: {
+    zipcode: number;
+    detail: string;
+    county: string;
+    city: string;
+  };
+}
+
 export type bookingRoomData = {
   name: string;
   checkInDate: Date;
@@ -29,23 +41,16 @@ export type bookingRoomData = {
   peopleNum: number;
   imageUrl: string;
   nights: number;
+  orderId: string;
+  userInfo: userInfo;
+  price: number |string;
 }
 export type BookingSubmitData = {
   roomId: string;
   checkInDate: Date;
   checkOutDate: Date;
   peopleNum: number;
-  userInfo: {
-    address: {
-      zipcode: number;
-      detail: string;
-      county: string;
-      city: string;
-    };
-    name: string;
-    email: string;
-    phone: string;
-  };
+  userInfo: userInfo;
 }
 export type AreaType = {
   ZipCode: string;
