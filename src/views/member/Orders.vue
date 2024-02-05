@@ -154,27 +154,7 @@ type userInfo = {
   };
 }
 onMounted(() => {
-  _axios.get(`/user`).then((res) => {
-    userInfo.value = res.data.data;
-    let birthdaySource = userInfo.value.birthday.split('T')[0].split('-');
-    userInfo.value.birthday = `${birthdaySource[0]} 年 ${birthdaySource[1]} 月 ${birthdaySource[2]} 日`
-    name.value = userInfo.value.name;
-    phone.value = userInfo.value.phone;
-    year.value = birthdaySource[0];
-    month.value = birthdaySource[1];
-    if (Number(month.value) < 10) {
-      month.value = month.value.replace('0', '');
-    }
-    reSetDates();
-    date.value = birthdaySource[2];
-    if (Number(date.value) < 10) {
-      date.value = date.value.replace('0', '');
-    }
-    city.value = userInfo.value.address.city;
-    reloadTownList();
-    town.value = String(userInfo.value.address.zipcode);
-    addressDetail.value = userInfo.value.address.detail;
-  })
+  getUserData();
 })
 
 const changeMode = (mode: string) => {
@@ -230,6 +210,32 @@ const reloadTownList = () => {
   town.value = townList.value[0].zipCode;
 }
 
+const getUserData = () => {
+  _axios.get(`/user`).then((res) => {
+    userInfo.value = res.data.data;
+    let birthdaySource = userInfo.value.birthday.split('T')[0].split('-');
+    userInfo.value.birthday = `${birthdaySource[0]} 年 ${birthdaySource[1]} 月 ${birthdaySource[2]} 日`
+    name.value = userInfo.value.name;
+    phone.value = userInfo.value.phone;
+    year.value = birthdaySource[0];
+    month.value = birthdaySource[1];
+    if (Number(month.value) < 10) {
+      month.value = month.value.replace('0', '');
+    }
+    reSetDates();
+    date.value = birthdaySource[2];
+    if (Number(date.value) < 10) {
+      date.value = date.value.replace('0', '');
+    }
+    city.value = userInfo.value.address.city;
+    reloadTownList();
+    town.value = String(userInfo.value.address.zipcode);
+    addressDetail.value = userInfo.value.address.detail;
+  }).catch(error => {
+    console.error('Error fetching user data:', error);
+  });
+};
+
 const saveAndShow = () => {
   const selectedTownItem = townList.value.find(item => item.zipCode === town.value);
   const selectedAreaName = selectedTownItem ? selectedTownItem.areaName : '';
@@ -252,6 +258,7 @@ const saveAndShow = () => {
       // Handle success
       console.log(response)
       console.log('User updated successfully');
+      getUserData();
       orderMode.value = 'show';
     })
     .catch(error => {
