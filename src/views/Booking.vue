@@ -1,6 +1,5 @@
 <template>
   <HomeContainer class="tw-bg-primary-40 tw-text-black-100">
-    {{ bookingRoomData }}
     <div class="container">
       <v-row>
         <v-col cols="12" md="8">

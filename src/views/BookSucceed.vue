@@ -15,20 +15,24 @@
           </p>
           <hr class="gb-divider tw-bg-white tw-my-20" />
           <h4 class="tw-text-h5 tw-mb-8">立即查看您的訂單紀錄</h4>
-          <BtnNormal text="前往我的訂單" class="tw-w-[220px]" />
+          <BtnNormal
+            text="前往我的訂單"
+            class="tw-w-[220px]"
+            @action="router.push(`/member/orders`)"
+          />
           <hr class="gb-divider tw-bg-white tw-my-20" />
           <h4 class="tw-text-h5 tw-mb-6">訂房人資訊</h4>
           <div class="tw-mb-4">
             <p>姓名</p>
-            <p>Jessica Ｗang</p>
+            <p>{{ bookingRoomData?.userInfo.name }}</p>
           </div>
           <div class="tw-mb-4">
             <p>手機號碼</p>
-            <p>+886 912 345 678</p>
+            <p>{{ bookingRoomData?.userInfo.phone }}</p>
           </div>
           <div class="tw-mb-4">
             <p>電子信箱</p>
-            <p>jessica@sample.com</p>
+            <p>{{ bookingRoomData?.userInfo.email }}</p>
           </div>
         </v-col>
         <v-col class="blockEle tw-w-[400px]">
