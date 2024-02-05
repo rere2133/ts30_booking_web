@@ -142,7 +142,19 @@ import {CityCountyData} from '@/utils/CityCountyData';
 const {_axios} = useHttp();
 const userInfo = ref<any>(null);
 const orderMode = ref('show');
-
+type userInfo = {
+  userInfo: {
+    address: {
+      zipcode: number;
+      detail: string;
+      county: string;
+      city: string;
+    };
+    name: string;
+    email: string;
+    phone: string;
+  };
+}
 onMounted(() => {
   _axios.get(`/user`).then((res) => {
     userInfo.value = res.data.data;
@@ -172,7 +184,7 @@ const changeMode = (mode: string) => {
 }
 
 // edit area
-const email = ref(userInfo.email);
+const email = ref(userInfo.value.email);
 const oldPassword = ref('');
 const newPassword = ref('');
 const reNewPassword = ref('');
