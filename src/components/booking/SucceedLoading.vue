@@ -20,7 +20,6 @@
 
 <script setup lang="ts">
 import { useHelper } from "@/utils/useHelper";
-import { ref } from "vue";
 
 defineProps({
   modelValue: Boolean,

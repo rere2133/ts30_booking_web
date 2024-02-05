@@ -6,7 +6,7 @@
           <div class="tw-flex tw-items-center tw-gap-6 tw-mb-10">
             <v-icon icon="mdi-check-circle" color="success" size="54"></v-icon>
             <h2 class="tw-text-h2">
-              恭喜，{{ bookingRoomData?.userInfo.name }}!<br />
+              恭喜，{{ bookingRoomData?.userInfo?.name }}!<br />
               您已預訂成功
             </h2>
           </div>
@@ -24,15 +24,15 @@
           <h4 class="tw-text-h5 tw-mb-6">訂房人資訊</h4>
           <div class="tw-mb-4">
             <p>姓名</p>
-            <p>{{ bookingRoomData?.userInfo.name }}</p>
+            <p>{{ bookingRoomData?.userInfo?.name }}</p>
           </div>
           <div class="tw-mb-4">
             <p>手機號碼</p>
-            <p>{{ bookingRoomData?.userInfo.phone }}</p>
+            <p>{{ bookingRoomData?.userInfo?.phone }}</p>
           </div>
           <div class="tw-mb-4">
             <p>電子信箱</p>
-            <p>{{ bookingRoomData?.userInfo.email }}</p>
+            <p>{{ bookingRoomData?.userInfo?.email }}</p>
           </div>
         </v-col>
         <v-col class="blockEle tw-w-[400px]">

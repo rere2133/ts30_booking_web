@@ -41,9 +41,9 @@ export type bookingRoomData = {
   peopleNum: number;
   imageUrl: string;
   nights: number;
-  orderId: string;
-  userInfo: userInfo;
-  price: number |string;
+  orderId?: string;
+  userInfo?: userInfo;
+  price?: number |string;
 }
 export type BookingSubmitData = {
   roomId: string;
