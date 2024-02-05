@@ -44,6 +44,7 @@
             <button
               type="button"
               class="tw-py-[16px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100"
+              @click="changeMode('edit')"
             >
               編輯
             </button>
@@ -54,10 +55,6 @@
         <div class="tw-mb-[20px] md:tw-mb-0 tw-flex-[5] tw-mx-[40px]">
           <member-card class="tw-text-black-100">
             <p class="tw-text-black-100 tw-text-[24px] tw-font-[700] tw-mb-[40px]">修改密碼</p>
-            <div class="tw-mb-[24px]">
-              <p class="tw-mb-[8px] tw-text-black-80 tw-leading-[1.5] tw-font-[500] tw-tracking-[0.32px]">電子信箱</p>
-              <input class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40" v-model="email" />
-            </div>
             <div class="tw-flex tw-items-center">
               <div class="tw-mr-[16px] tw-flex-[1]">
                 <p class="tw-mb-[8px] tw-text-black-80 tw-leading-[1.5] tw-font-[500] tw-tracking-[0.32px]">舊密碼</p>
@@ -78,7 +75,7 @@
             </div>
             <button
               type="button"
-              class="tw-py-[16px] tw-mt-[24px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100" @click="orderMode = 'show'"
+              class="tw-py-[16px] tw-mt-[24px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100" @click="saveAndShow"
             >
               儲存設定
             </button>
@@ -123,7 +120,7 @@
             </div>
             <button
               type="button"
-              class="tw-py-[16px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100" @click="orderMode = 'show'"
+              class="tw-py-[16px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100" @click="saveAndShow"
             >
               儲存設定
             </button>
@@ -139,6 +136,7 @@ import {ref,onMounted} from 'vue';
 import {useHttp} from '@/plugins/httpAxios';
 import MemberCard from "@/components/member/Card.vue";
 import {CityCountyData} from '@/utils/CityCountyData';
+
 const {_axios} = useHttp();
 const userInfo = ref<any>(null);
 const orderMode = ref('show');
@@ -184,7 +182,6 @@ const changeMode = (mode: string) => {
 }
 
 // edit area
-const email = ref('');
 const oldPassword = ref('');
 const newPassword = ref('');
 const reNewPassword = ref('');
@@ -232,6 +229,37 @@ const reloadTownList = () => {
   })
   town.value = townList.value[0].zipCode;
 }
+
+const saveAndShow = () => {
+  const selectedTownItem = townList.value.find(item => item.zipCode === town.value);
+  const selectedAreaName = selectedTownItem ? selectedTownItem.areaName : '';
+  const payload = {
+    name: name.value,
+    phone: phone.value,
+    birthday: `${year.value}-${month.value}-${date.value}`,
+    address: {
+      zipcode: parseInt(town.value),
+      detail: addressDetail.value,
+      county: selectedAreaName,
+      city: city.value
+    },
+    oldPassword: oldPassword.value,
+    newPassword: newPassword.value
+  };
+  console.log("payload:", payload)
+  _axios.put('/user', payload)
+    .then(response => {
+      // Handle success
+      console.log(response)
+      console.log('User updated successfully');
+      orderMode.value = 'show';
+    })
+    .catch(error => {
+      // Handle error
+      console.error('Error updating user:', error);
+    });
+};
+
 </script>
 
 <style scoped></style>
