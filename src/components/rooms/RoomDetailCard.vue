@@ -1,5 +1,10 @@
 <template>
-  <div class="tw-bg-white tw-rounded-xl tw-p-6 tw-flex tw-gap-4 tw-flex-wrap">
+  <div
+    class="tw-bg-white tw-rounded-xl tw-p-6 tw-flex tw-gap-4 tw-flex-wrap"
+    :class="
+      $attrs.variant == 'outlined' ? 'tw-border tw-border-priamry-100' : ''
+    "
+  >
     <div v-for="(item, idx) in items" :key="idx">
       <div class="tw-flex">
         <v-icon
