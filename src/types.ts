@@ -57,3 +57,12 @@ export type CityCountyData = {
   CityEngName?: string;
   AreaList: AreaType[];
 }
+
+export type Food = {
+  _id: string;
+  title: string;
+  description: string;
+  diningTime: string;
+  image: string;
+  creator: string;
+}

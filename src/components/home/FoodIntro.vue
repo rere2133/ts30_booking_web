@@ -44,7 +44,7 @@ import FoodCard from "./FoodCard.vue";
 import { useHelper } from "@/utils/useHelper";
 import { ref, onMounted } from 'vue';
 import { useHttp } from "@/plugins/httpAxios";
-import { Food } from "@/types"; // Assuming you have a Food interface
+import { Food } from "@/types";
 
 const { getImageUrl } = useHelper();
 const foods = ref<Food[]>([]);
