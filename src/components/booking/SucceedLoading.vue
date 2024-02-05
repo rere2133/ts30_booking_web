@@ -19,13 +19,13 @@
 </template>
 
 <script setup lang="ts">
-import { useHelper } from "@/utils/useHelper";
+// import { useHelper } from "@/utils/useHelper";
 
 defineProps({
   modelValue: Boolean,
 });
 
-const { getImageUrl } = useHelper();
+// const { getImageUrl } = useHelper();
 </script>
 
 <style scoped lang="scss">
