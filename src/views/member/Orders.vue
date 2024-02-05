@@ -184,7 +184,7 @@ const changeMode = (mode: string) => {
 }
 
 // edit area
-const email = ref(userInfo.value.email);
+const email = ref('');
 const oldPassword = ref('');
 const newPassword = ref('');
 const reNewPassword = ref('');
