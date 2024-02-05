@@ -6,7 +6,7 @@
         <p class="tw-text-white tw-font-[700] tw-text-[32px] md:tw-text-[48px] tw-tracking-[1.6px] md:tw-tracking-[2.4px]" v-if="userInfo != null">Hello，{{ userInfo.name }}</p>
       </div>
     </div>
-    <div class="tw-max-w-[1280px] tw-mx-auto tw-mt-[40px] md:tw-mt-[80px] tw-mb-[40px] md:tw-mb-[120px]" >
+    <div class="tw-max-w-[1280px] tw-mx-auto tw-mt-[40px] md:tw-mt-[112px] tw-mb-[40px] md:tw-mb-[120px]" >
       <section-tab class="tw-mb-[40px] md:tw-mb-[80px]" :sectionList="sectionList" :activeItemValue="activeItemValue" @change="emitSectionTabChange"></section-tab>
       <router-view></router-view>
     </div>
