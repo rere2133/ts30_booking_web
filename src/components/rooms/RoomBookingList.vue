@@ -49,12 +49,12 @@
         </div>
       </div>
       <div class="tw-text-h6 tw-text-primary-100 tw-mb-6">
-        NT$ {{ roomInfo?.price ? roomInfo?.price * nights : "0" }}
+        NT$ {{ totalPrice }}
       </div>
       <BtnNormal
         text="立即預定"
         @action="bookingSubmit"
-        :disabled="!checkInDate || !checkOutDate"
+        :disabled="!checkInDate || !checkOutDate || totalPrice == 0"
       />
     </div>
     <v-dialog v-model="datePicker" width="600">
@@ -166,6 +166,9 @@ const tempNights = computed(() => {
   //     selectedDate.value[selectedDate.value.length - 1].getTime()) /
   //   (1000 * 60 * 60 * 24)
   // );
+});
+const totalPrice = computed(() => {
+  return props.roomInfo?.price ? props.roomInfo?.price * nights.value : 0;
 });
 const dateSubmit = () => {
   checkInDate.value = selectedDate.value[0];

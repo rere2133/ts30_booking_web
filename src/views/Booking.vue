@@ -131,6 +131,7 @@
         </v-col>
       </v-row>
     </div>
+    <SecceedLoading v-model="loading" />
   </HomeContainer>
 </template>
 
@@ -139,8 +140,9 @@ import HomeContainer from "@/components/home/HomeContainer.vue";
 import TextField from "@/components/input/TextField.vue";
 import SelectInput from "@/components/input/SelectInput.vue";
 import RoomInfoZone from "@/components/rooms/RoomInfoZone.vue";
-import useRoomStore from "@/store/roomStore";
 import BtnNormal from "@/components/BtnNormal.vue";
+import SecceedLoading from "@/components/booking/SucceedLoading.vue";
+import useRoomStore from "@/store/roomStore";
 import { useFixedBlock } from "@/utils/useFixedBlock";
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { storeToRefs } from "pinia";
@@ -169,6 +171,7 @@ const userInfo = ref({
     city: "",
   },
 });
+const loading = ref(false);
 const cityItems = computed(() => {
   return CityCountyData.map((item) => item.CityName);
 });
@@ -208,7 +211,11 @@ const confirmBooking = async () => {
     const res = await _axios.post("/orders", payload);
     console.log({ res });
     if (res.status) {
-      router.push({ name: "BookSucceed" });
+      loading.value = true;
+      await setTimeout(() => {
+        loading.value = false;
+        router.push({ name: "BookSucceed" });
+      }, 2000);
     }
   } catch (err) {
     console.log(err);
@@ -216,9 +223,9 @@ const confirmBooking = async () => {
 };
 
 onMounted(() => {
-  if (!bookingRoomData.value?.name) {
-    router.back();
-  }
+  // if (!bookingRoomData.value?.name) {
+  //   router.back();
+  // }
 });
 
 onMounted(() => {
