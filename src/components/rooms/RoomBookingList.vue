@@ -116,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import BtnNormal from "../BtnNormal.vue";
 import { useHelper } from "@/utils/useHelper";
@@ -142,10 +142,19 @@ const maxNum = computed(() => {
   if (peopleNum.value >= max) return true;
   else return false;
 });
-onMounted(() => {
-  if (props.roomInfo?.maxPeople && peopleNum.value > props.roomInfo?.maxPeople)
-    peopleNum.value = props.roomInfo?.maxPeople || 1;
-});
+
+watch(
+  () => props.roomInfo?.maxPeople,
+  (val) => {
+    if (val && peopleNum.value > val) {
+      peopleNum.value = val || 1;
+    }
+  },
+  {
+    immediate: true,
+  }
+);
+
 // Date
 const minDate = computed(() => {
   let d = new Date();
