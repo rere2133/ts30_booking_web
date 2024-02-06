@@ -43,23 +43,23 @@ onMounted(() => {
   console.log(routeName);
   if (routeName == 'Member') {
     router.push({
-      name: 'Orders'
+      name: 'Profile'
     })
     routerMatch('0')
-  } else if (routeName == 'Orders') {
-    activeItemValue.value = '0';
   } else if (routeName == 'Profile') {
+    activeItemValue.value = '0';
+  } else if (routeName == 'Orders') {
     activeItemValue.value = '1';
   }
 })
 const routerMatch = (val: string) => {
   if (val == '0') {
     router.push({
-      name: 'Orders'
+      name: 'Profile'
     })
   } else if (val == '1') {
     router.push({
-      name: 'Profile'
+      name: 'Orders'
     })
   }
 }

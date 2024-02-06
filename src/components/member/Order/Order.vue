@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="roomTitle tw-text-h5 tw-mb-6">房內設備</div>
-    <ProfileDevice :items="roomInfo?.facilityInfo" />
+    <OrderDevice :items="roomInfo?.facilityInfo" />
     <div class="roomTitle tw-text-h5 tw-mb-6">備品提供</div>
-    <ProfileDevice :items="roomInfo?.amenityInfo" />
+    <OrderDevice :items="roomInfo?.amenityInfo" />
   </div>
 </template>
 
 <script setup lang="ts">
-import ProfileDevice from "@/components/member/profile/ProfileDevice.vue";
+import OrderDevice from "@/components/member/Order/OrderDevice.vue";
 type roomInfo =  {
     _id: string;
     name: string;
