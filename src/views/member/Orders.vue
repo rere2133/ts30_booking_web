@@ -193,6 +193,7 @@ import router from '@/plugins/router';
   };
   const getOrders = () => {
     _axios.get(`orders`).then((res) => {
+      roomList.value = [];
       res.data.data.forEach(async (item: orderInfo) => {
         _axios.get(`rooms/${item.roomId}`).then((res) => {
           let tempObject = JSON.parse(JSON.stringify(item));
