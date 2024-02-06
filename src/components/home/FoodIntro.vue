@@ -21,8 +21,8 @@
           class="tw-flex tw-overflow-x-scroll tw-pb-4 tw-mr-4 tw-w-full lg:tw-w-[84vw]"
         >
           <FoodCard
-            v-for="food in homeData.food"
-            :key="food.id"
+            v-for="food in foods"
+            :key="food._id"
             :food="food"
             class="tw-mr-5"
           />
@@ -42,9 +42,25 @@
 import HomeContainer from "./HomeContainer.vue";
 import FoodCard from "./FoodCard.vue";
 import { useHelper } from "@/utils/useHelper";
-import { homeData } from "@/utils/homeData";
+import { ref, onMounted } from 'vue';
+import { useHttp } from "@/plugins/httpAxios";
+import { Food } from "@/types";
 
 const { getImageUrl } = useHelper();
+const foods = ref<Food[]>([]);
+const { _axios } = useHttp();
+const getFoods = async () => {
+  try {
+    const res = await _axios.get("/home/culinary");
+    console.log({ res });
+    foods.value = res.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+onMounted(() => {
+  getFoods();
+});
 </script>
 
 <style scoped></style>

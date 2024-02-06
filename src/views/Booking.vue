@@ -131,6 +131,7 @@
         </v-col>
       </v-row>
     </div>
+    <SecceedLoading v-model="loading" />
   </HomeContainer>
 </template>
 
@@ -139,21 +140,22 @@ import HomeContainer from "@/components/home/HomeContainer.vue";
 import TextField from "@/components/input/TextField.vue";
 import SelectInput from "@/components/input/SelectInput.vue";
 import RoomInfoZone from "@/components/rooms/RoomInfoZone.vue";
-import useRoomStore from "@/store/roomStore";
 import BtnNormal from "@/components/BtnNormal.vue";
+import SecceedLoading from "@/components/booking/SucceedLoading.vue";
+import useRoomStore from "@/store/roomStore";
 import { useFixedBlock } from "@/utils/useFixedBlock";
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
 import { CityCountyData } from "@/utils/CityCountyData";
-import type { AreaType } from "@/types";
 import { useHttp } from "@/plugins/httpAxios";
+import type { AreaType } from "@/types";
 
 const router = useRouter();
 const { params } = useRoute();
-const roomStore = useRoomStore();
 const { _axios } = useHttp();
+const roomStore = useRoomStore();
 const { bookingRoomData } = storeToRefs(roomStore);
 const { dateToChinese, dateFormat } = useHelper();
 const { blockList, fixedBlock, setBlockPosition, handleScroll } =
@@ -169,6 +171,7 @@ const userInfo = ref({
     city: "",
   },
 });
+const loading = ref(false);
 const cityItems = computed(() => {
   return CityCountyData.map((item) => item.CityName);
 });
@@ -208,7 +211,15 @@ const confirmBooking = async () => {
     const res = await _axios.post("/orders", payload);
     console.log({ res });
     if (res.status) {
-      router.push({ name: "BookSucceed" });
+      roomStore.bookingRoomData!.orderId = res.data.data._id;
+      roomStore.bookingRoomData!.userInfo = res.data.data.userInfo;
+      roomStore.bookingRoomData!.price = totalPrice.value;
+      // console.log(roomStore.bookingRoomData);
+      loading.value = true;
+      await setTimeout(() => {
+        loading.value = false;
+        router.push({ name: "BookSucceed" });
+      }, 2000);
     }
   } catch (err) {
     console.log(err);
