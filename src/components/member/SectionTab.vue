@@ -45,9 +45,9 @@ const emitActive = (item: SectionItem) => {
 };
 onMounted(() => {
   let routeName = route.name;
-  if (routeName == "Orders") {
+  if (routeName == "Profile") {
     activeItemValue.value = "0";
-  } else if (routeName == "Profile") {
+  } else if (routeName == "Orders") {
     activeItemValue.value = "1";
   }
 });

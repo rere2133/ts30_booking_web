@@ -1,6 +1,6 @@
 <template>
-  <div class="member-profile tw-px-[40px]">
-    <div class="md:tw-flex tw-mx-[-40px]" v-if="roomList.length > 0">
+  <div class="member-profile tw-px-[24px]">
+    <div class="md:tw-flex tw-mx-[-24px]" v-if="roomList.length > 0">
       
       <div class="tw-mb-[20px] md:tw-mb-0 tw-flex-[6] tw-mx-[40px]">
           <member-card class="tw-text-black-100">
@@ -34,8 +34,8 @@
             </div>
             <Order :roomInfo="roomList[0].roomInfo" />
             <div class="tw-flex tw-mx-[-8px] tw-mt-[24px]">
-              <v-btn color="primary" variant="outlined" class="tw-mx-[8px] tw-flex-1">取消預定</v-btn>
-              <v-btn color="primary" class="tw-mx-[8px] tw-flex-1">查看詳情</v-btn>
+              <v-btn color="primary" variant="outlined" class="tw-mx-[8px] tw-flex-1" @click="openCancelDialog">取消預定</v-btn>
+              <v-btn color="primary" class="tw-mx-[8px] tw-flex-1" @click="toRoomInfo">查看詳情</v-btn>
             </div>
           </member-card>
         </div>
@@ -70,6 +70,34 @@
           </member-card>
         </div>
     </div>
+    <div class="tw-text-h4" v-else>
+      目前尚無訂單
+    </div>
+    <v-dialog v-model="isCancelDialogOpen">
+      <v-card class="tw-w-[600px] tw-mx-[auto]">
+        <div class="tw-p-[10px] tw-text-right">
+          <button type="button" @click="isCancelDialogOpen = false">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <g clip-path="url(#clip0_569_8964)">
+              <path d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12L19 6.41Z" fill="#4B4B4B"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_569_8964">
+              <rect width="24" height="24" fill="white"/>
+              </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </div>
+        <div class="tw-py-[100px] tw-px-[80px] tw-text-center tw-border-b-[1px] tw-border-b-solid tw-border-b-primary">
+          <span class="tw-text-body">確定要取消此房型的預定嗎？</span>
+        </div>
+        <div class="tw-flex tw-p-[20px] tw-mx-[-10px]">
+          <v-btn color="primary" variant="outlined" class="tw-flex-1 tw-mx-[10px]">關閉視窗</v-btn>
+          <v-btn color="primary" class="tw-flex-1 tw-mx-[10px]" @click="removeRoder">確定取消</v-btn>
+        </div>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -127,42 +155,43 @@
   import {useHttp} from '@/plugins/httpAxios';
   import MemberCard from "@/components/member/Card.vue";
   import Order from "@/components/member/Order/Order.vue";
+import router from '@/plugins/router';
   const {_axios} = useHttp();
   const roomList = ref<mixinOrderInfo[]>([]);
-    const dateToString = (timestamp: number) => {
-  let date = new Date(timestamp);
-  switch (date.getDay()) {
-    case 0: {
-      return '星期日';
+  const dateToString = (timestamp: number) => {
+    let date = new Date(timestamp);
+    switch (date.getDay()) {
+      case 0: {
+        return '星期日';
+      }
+      case 1: {
+        return '星期一';
+      }
+      case 2: {
+        return '星期二';
+      }
+      case 3: {
+        return '星期三';
+      }
+      case 4: {
+        return '星期四';
+      }
+      case 5: {
+        return '星期五';
+      }
+      case 6: {
+        return '星期六';
+      }
+      default: {
+        return '星期六';
+      }
     }
-    case 1: {
-      return '星期一';
-    }
-    case 2: {
-      return '星期二';
-    }
-    case 3: {
-      return '星期三';
-    }
-    case 4: {
-      return '星期四';
-    }
-    case 5: {
-      return '星期五';
-    }
-    case 6: {
-      return '星期六';
-    }
-    default: {
-      return '星期六';
-    }
-  }
-};
+  };
   const dateFormat = (timestamp: number) => {
-  let date = new Date(timestamp - 1000);
-  return `${date.getMonth() + 1} 月 ${date.getDate()} 日${dateToString(timestamp)}`;
-};
-  onMounted(() => {
+    let date = new Date(timestamp - 1000);
+    return `${date.getMonth() + 1} 月 ${date.getDate()} 日${dateToString(timestamp)}`;
+  };
+  const getOrders = () => {
     _axios.get(`orders`).then((res) => {
       res.data.data.forEach(async (item: orderInfo) => {
         _axios.get(`rooms/${item.roomId}`).then((res) => {
@@ -175,7 +204,23 @@
         })
       })
     })
+  }
+  onMounted(() => {
+    getOrders();
   })
+  const isCancelDialogOpen = ref(false);
+  const openCancelDialog = () => {
+    isCancelDialogOpen.value = true;
+  }
+  const removeRoder = () => {
+    _axios.delete(`orders/${roomList.value[0]._id}`).then(() => {
+      getOrders();
+      isCancelDialogOpen.value = false;
+    })
+  }
+  const toRoomInfo = () => {
+    router.push(`/roomDetail/${roomList.value[0].roomInfo._id}`);
+  }
 </script>
 <style scoped lang="scss">
   .start-date {
