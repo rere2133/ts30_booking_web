@@ -22,7 +22,7 @@ export type RoomType = {
   createdAt: string;
   updatedAt: string;
 }
-export type userInfo = {
+export type UserInfo = {
   name: string;
   email: string;
   phone: string;
@@ -42,7 +42,7 @@ export type bookingRoomData = {
   imageUrl: string;
   nights: number;
   orderId?: string;
-  userInfo?: userInfo;
+  userInfo?: UserInfo;
   price?: number |string;
 }
 export type BookingSubmitData = {
@@ -50,7 +50,7 @@ export type BookingSubmitData = {
   checkInDate: Date;
   checkOutDate: Date;
   peopleNum: number;
-  userInfo: userInfo;
+  userInfo: UserInfo;
 }
 export type AreaType = {
   ZipCode: string;
