@@ -44,7 +44,7 @@
             <div class="tw-text-h5 tw-mb-[24px]">歷史訂單</div>
             <div v-for="item in roomList" :key="`history_${item._id}`">
               <div class="tw-flex">
-                <img class="tw-flex-0 tw-mr-[8px] tw-object-center tw-object-cover tw-max-h-[80px]" :src="item.roomInfo.imageUrl" width="120px" height="80px" />
+                <img class="tw-flex-0 tw-mr-[8px] tw-rounded-[5px] tw-object-center tw-object-cover tw-max-h-[80px]" :src="item.roomInfo.imageUrl" width="120px" height="80px" />
                 <div class="history-item-info">
                   <div class="tw-text-body tw-mb-[8px]">預定參考編號：#{{ item._id }}</div>
                   <div class="tw-text-h6">{{ item.roomInfo.name }}</div>
