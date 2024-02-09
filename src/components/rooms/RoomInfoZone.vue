@@ -14,12 +14,37 @@
         :info="`${roomInfo?.maxPeople}人`"
       />
     </div>
-    <div class="roomTitle tw-text-h5 tw-mb-6">房間格局</div>
-    <RoomDetailCard :items="roomInfo?.layout" />
-    <div class="roomTitle tw-text-h5 tw-mb-6">房內設備</div>
-    <RoomDetailCard :items="roomInfo?.facilityInfo" />
-    <div class="roomTitle tw-text-h5 tw-mb-6">備品提供</div>
-    <RoomDetailCard :items="roomInfo?.amenityInfo" />
+    <div
+      v-if="roomInfo?.layout?.length != 0"
+      class="roomTitle tw-text-h5 tw-mb-6"
+    >
+      房間格局
+    </div>
+    <RoomDetailCard
+      v-if="roomInfo?.layout?.length != 0"
+      :items="roomInfo?.layout"
+    />
+
+    <div
+      v-if="roomInfo?.facilityInfo?.length != 0"
+      class="roomTitle tw-text-h5 tw-mb-6"
+    >
+      房內設備
+    </div>
+    <RoomDetailCard
+      v-if="roomInfo?.facilityInfo?.length != 0"
+      :items="roomInfo?.facilityInfo"
+    />
+    <div
+      v-if="roomInfo?.amenityInfo?.length != 0"
+      class="roomTitle tw-text-h5 tw-mb-6"
+    >
+      備品提供
+    </div>
+    <RoomDetailCard
+      v-if="roomInfo?.amenityInfo?.length != 0"
+      :items="roomInfo?.amenityInfo"
+    />
   </div>
 </template>
 

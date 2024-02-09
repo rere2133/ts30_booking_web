@@ -68,18 +68,26 @@
               </p>
               <p>NT$ {{ bookingRoomData?.price }}</p>
               <hr class="gb-divider tw-bg-black-40 tw-my-5" />
-              <p class="tw-text-subTitle bookingTitle tw-border-primary-100">
+              <p
+                v-if="roomInfo?.facilityInfo?.length != 0"
+                class="tw-text-subTitle bookingTitle tw-border-primary-100"
+              >
                 房內設備
               </p>
               <RoomDetailCard
+                v-if="roomInfo?.facilityInfo?.length != 0"
                 :items="roomInfo?.facilityInfo"
                 variant="outlined"
                 class="tw-mb-6 tw-mt-2"
               />
-              <p class="tw-text-subTitle bookingTitle tw-border-primary-100">
+              <p
+                v-if="roomInfo?.amenityInfo?.length != 0"
+                class="tw-text-subTitle bookingTitle tw-border-primary-100"
+              >
                 備品提供
               </p>
               <RoomDetailCard
+                v-if="roomInfo?.amenityInfo?.length != 0"
                 :items="roomInfo?.amenityInfo"
                 variant="outlined"
                 class="tw-mt-2"
