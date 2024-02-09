@@ -94,6 +94,7 @@
               </p>
             </div>
             <button
+              @click="changeMode('edit')"
               type="button"
               class="tw-py-[16px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100"
             >
