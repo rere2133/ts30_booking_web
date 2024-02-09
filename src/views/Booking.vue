@@ -160,7 +160,7 @@ const { bookingRoomData } = storeToRefs(roomStore);
 const { dateToChinese, dateFormat } = useHelper();
 const { blockList, fixedBlock, setBlockPosition, handleScroll } =
   useFixedBlock();
-const userInfo = ref<UserInfo | undefined>({
+const userInfo = ref<UserInfo>({
   name: "",
   phone: "",
   email: "",
