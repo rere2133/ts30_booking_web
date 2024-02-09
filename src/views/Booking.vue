@@ -60,30 +60,30 @@
             label="姓名"
             placeholder="請輸入姓名"
             class="tw-mb-4"
-            v-model="userInfo.name"
+            v-model="userInfo!.name"
           />
           <TextField
             label="手機號碼"
             placeholder="請輸入手機號碼"
             class="tw-mb-4"
-            v-model="userInfo.phone"
+            v-model="userInfo!.phone"
           />
           <TextField
             label="電子信箱"
             placeholder="請輸入電子信箱"
             class="tw-mb-4"
-            v-model="userInfo.email"
+            v-model="userInfo!.email"
           />
           <div class="tw-flex tw-items-end tw-gap-4">
             <SelectInput
-              v-model="userInfo.address.city"
+              v-model="userInfo!.address.city"
               :items="cityItems"
               label="地址"
               placeholder="縣市"
               class="tw-flex-1"
             />
             <SelectInput
-              v-model="userInfo.address.county"
+              v-model="userInfo!.address.county"
               :items="countyItems"
               :disabled="countyItems.length === 0"
               placeholder="區域"
@@ -95,7 +95,7 @@
           <TextField
             placeholder="請輸入詳細地址"
             class="tw-mb-4"
-            v-model="userInfo.address.detail"
+            v-model="userInfo!.address.detail"
           />
           <hr class="gb-divider tw-bg-black-bg tw-my-10" />
           <div class="tw-text-h4 tw-my-6">房間資訊</div>
@@ -150,7 +150,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
 import { CityCountyData } from "@/utils/CityCountyData";
 import { useHttp } from "@/plugins/httpAxios";
-import type { AreaType } from "@/types";
+import type { AreaType, UserInfo } from "@/types";
 
 const router = useRouter();
 const { params } = useRoute();
@@ -160,15 +160,15 @@ const { bookingRoomData } = storeToRefs(roomStore);
 const { dateToChinese, dateFormat } = useHelper();
 const { blockList, fixedBlock, setBlockPosition, handleScroll } =
   useFixedBlock();
-const userInfo = ref({
-  name: "RRR",
-  email: "abc@gmail.com",
-  phone: "0911112223",
+const userInfo = ref<UserInfo>({
+  name: "",
+  phone: "",
+  email: "",
   address: {
-    zipcode: 0,
-    detail: "",
-    county: "",
     city: "",
+    county: "",
+    detail: "",
+    zipcode: 0,
   },
 });
 const loading = ref(false);
@@ -177,9 +177,9 @@ const cityItems = computed(() => {
 });
 const countyItems = ref<AreaType[]>([]);
 watch(
-  () => userInfo.value.address.city,
+  () => userInfo.value?.address.city,
   (city) => {
-    if (city) {
+    if (city && userInfo.value) {
       userInfo.value.address.county = "";
       const cityData = CityCountyData.find((item) => item.CityName === city);
       countyItems.value = cityData?.AreaList || [];
@@ -194,11 +194,10 @@ const totalPrice = computed(() => {
   }
 });
 const confirmBooking = async () => {
-  //TODO: validate payload
   let zipcode = countyItems.value.find(
-    (item) => item?.AreaName === userInfo.value.address.county
+    (item) => item?.AreaName === userInfo.value!.address.county
   )?.ZipCode;
-  userInfo.value.address.zipcode = zipcode ? +zipcode : 0;
+  userInfo.value!.address.zipcode = zipcode ? +zipcode : 0;
   let payload = {
     roomId: params.id,
     checkInDate: dateFormat(bookingRoomData.value?.checkInDate),
@@ -206,7 +205,7 @@ const confirmBooking = async () => {
     peopleNum: bookingRoomData.value?.peopleNum,
     userInfo: userInfo.value,
   };
-  console.log({ payload });
+  // console.log({ payload });
   try {
     const res = await _axios.post("/orders", payload);
     console.log({ res });
