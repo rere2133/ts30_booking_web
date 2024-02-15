@@ -42,15 +42,8 @@ const routes = [
         name: 'Signup',
         component: () => import('@/views/auth/Signup.vue'),
       },
-    ]
-  },
-  {
-    path: '/member',
-    name: 'MemberLayout',
-    component: () => import('@/layout/Member.vue'),
-    children: [
       {
-        path: '',
+        path: 'member',
         name: 'Member',
         component: () => import('@/views/member/index.vue'),
         children:[
@@ -65,9 +58,10 @@ const routes = [
             component: () => import('@/views/member/Orders.vue'),
           },
         ]
-      },
+      }
     ]
-  }
+  },
+
 ]
 
 const router = createRouter({
