@@ -107,6 +107,11 @@
             min-width="130"
             rounded="lg"
             @click="dateSubmit"
+            :disabled="
+              !selectedDate[0] ||
+              !selectedDate[selectedDate.length - 1] ||
+              selectedDate[0] == selectedDate[selectedDate.length - 1]
+            "
             >確認日期</v-btn
           >
         </div>
@@ -164,7 +169,7 @@ const datePicker = ref(false);
 const checkInDate = ref();
 const checkOutDate = ref();
 const selectedDate = ref<Date[]>([]);
-const nights = ref(0);
+const nights = ref(1);
 const tempNights = computed(() => {
   let sd = selectedDate.value[0];
   let ed = selectedDate.value[selectedDate.value.length - 1];
@@ -227,12 +232,20 @@ const bookingSubmit = () => {
   router.push(`/booking/${params.id}`);
 };
 // init
+const initCheckOutDate = () => {
+  let d = new Date();
+  let nextDay = new Date(d.setDate(d.getDate() + 1));
+  checkInDate.value = new Date();
+  checkOutDate.value = nextDay;
+};
 onMounted(() => {
   if (roomStore.bookingRoomData != undefined) {
     checkInDate.value = roomStore.bookingRoomData.checkInDate;
     checkOutDate.value = roomStore.bookingRoomData.checkOutDate;
     peopleNum.value = roomStore.bookingRoomData.peopleNum || 2;
     nights.value = roomStore.bookingRoomData.nights;
+  } else {
+    initCheckOutDate();
   }
 });
 </script>

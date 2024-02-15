@@ -4,6 +4,7 @@
       class="tw-px-[16px] lg:tw-px-[80px] tw-py-6"
       flat
       color="transparent"
+      scroll-behavior="hide"
     >
       <template #title>
         <v-img
@@ -56,7 +57,7 @@
         <div v-else>
           <v-icon
             v-if="!showOverlay"
-            @click="showOverlay = true"
+            @click="(showOverlay = true), updateMobileUserName()"
             icon="mdi-menu"
             class="tw-pr-4"
           />
@@ -85,22 +86,24 @@
         <!-- overlay 内容放在这里 -->
         <div class="overlay-content">
           <v-list bg-color="transparent" class="text-center tw-w-full">
-            <v-list-item
-              v-for="link in appStore.navItems"
-              :key="link.path"
-              class="tw-py-8"
-            >
-              <div
-                v-if="link.title == '立即訂房'"
-                class="tw-text-md tw-font-bold tw-text-white tw-bg-primary-100 tw-py-4 tw-w-[90%] tw-mx-auto tw-rounded-lg tw-cursor-pointer hover:tw-bg-primary-80 tw-transition-all"
-                @click="toPage(link.path)"
-              >
-                {{ link.title }}
-              </div>
-
-              <p v-else class="tw-text-title" @click="toPage(link.path)">
-                會員資料
+            <v-list-item class="tw-py-8">
+              <p class="tw-text-title" @click="toPage('/rooms')">客房旅宿</p>
+            </v-list-item>
+            <v-list-item v-if="appStore.isLogin" class="tw-py-8">
+              <p class="tw-text-title" @click="toPage('/member/profile')">
+                {{ mobileUserName }}
               </p>
+            </v-list-item>
+            <v-list-item v-if="!appStore.isLogin" class="tw-py-8">
+              <p class="tw-text-title" @click="toPage('/login')">會員登入</p>
+            </v-list-item>
+            <v-list-item class="tw-py-8">
+              <div
+                class="tw-text-md tw-font-bold tw-text-white tw-bg-primary-100 tw-py-4 tw-w-[90%] tw-mx-auto tw-rounded-lg tw-cursor-pointer hover:tw-bg-primary-80 tw-transition-all"
+                @click="toPage('/rooms')"
+              >
+                立即訂房
+              </div>
             </v-list-item>
             <v-list-item>
               <p v-if="appStore.isLogin" class="tw-text-title" @click="logout">
@@ -142,7 +145,7 @@ const showOverlay = ref(false);
 const memeberItems = ref([
   {
     title: "會員資料",
-    path: "/member",
+    path: "/member/profile",
   },
   {
     title: "登出",
@@ -157,17 +160,23 @@ const logout = () => {
   clearLocalStorage();
   location.reload();
 };
+const mobileUserName = ref("");
 const userName = computed(() => {
   return localStorage.getItem("userName") || "";
 });
+const updateMobileUserName = () => {
+  mobileUserName.value = localStorage.getItem("userName") || "";
+};
+
 watch(
   userName,
   (val) => {
     if (val) {
       appStore.navItems.splice(1, 1, {
         title: userName.value,
-        path: "/member",
+        path: "/member/profile",
       });
+      mobileUserName.value = val;
     }
   },
   {

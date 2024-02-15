@@ -111,7 +111,7 @@ import { useHelper } from "@/utils/useHelper";
 import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 
-const { blockList, fixedBlock, setBlockPosition, handleScroll } =
+const { blockList, fixedBlock, setBlockPosition, handleScroll, resizeHandler } =
   useFixedBlock();
 const { dateToChinese } = useHelper();
 const roomStore = useRoomStore();
@@ -176,10 +176,12 @@ onMounted(() => {
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", resizeHandler);
   setBlockPosition(blockList.value!.offsetTop, blockList.value!.offsetLeft);
 });
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", resizeHandler);
 });
 </script>
 

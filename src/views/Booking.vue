@@ -59,28 +59,29 @@
           <TextField
             label="姓名"
             placeholder="請輸入姓名"
-            class="tw-mb-4"
             v-model="userInfo!.name"
+            :rules="[userInfoRules.name]"
           />
           <TextField
             label="手機號碼"
             placeholder="請輸入手機號碼"
-            class="tw-mb-4"
             v-model="userInfo!.phone"
+            :rules="[userInfoRules.phone]"
           />
           <TextField
             label="電子信箱"
             placeholder="請輸入電子信箱"
-            class="tw-mb-4"
             v-model="userInfo!.email"
+            :rules="[userInfoRules.email]"
           />
-          <div class="tw-flex tw-items-end tw-gap-4">
+          <div class="tw-flex tw-items-end tw-gap-4 tw-mt-4 tw-mb-2">
             <SelectInput
               v-model="userInfo!.address.city"
               :items="cityItems"
               label="地址"
               placeholder="縣市"
               class="tw-flex-1"
+              :rules="[userInfoRules.city]"
             />
             <SelectInput
               v-model="userInfo!.address.county"
@@ -90,12 +91,13 @@
               class="tw-flex-1"
               item-title="AreaName"
               item-value="AreaName"
+              :rules="[userInfoRules.county]"
             />
           </div>
           <TextField
             placeholder="請輸入詳細地址"
-            class="tw-mb-4"
             v-model="userInfo!.address.detail"
+            :rules="[userInfoRules.detail]"
           />
           <hr class="gb-divider tw-bg-black-bg tw-my-10" />
           <div class="tw-text-h4 tw-my-6">房間資訊</div>
@@ -125,13 +127,18 @@
                 <div>總價</div>
                 <div class="tw-ml-auto">NT$ {{ totalPrice }}</div>
               </div>
-              <BtnNormal text="確認訂房" @action="confirmBooking" />
+              <BtnNormal
+                :disabled="validateInfo || loading"
+                text="確認訂房"
+                @action="validatePayload"
+              />
+              <!-- @action="confirmBooking" -->
             </div>
           </div>
         </v-col>
       </v-row>
     </div>
-    <SecceedLoading v-model="loading" />
+    <SecceedLoading v-model="successLoading" />
   </HomeContainer>
 </template>
 
@@ -148,17 +155,21 @@ import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { useHelper } from "@/utils/useHelper";
+import { useRules } from "@/utils/useRules";
 import { CityCountyData } from "@/utils/CityCountyData";
 import { useHttp } from "@/plugins/httpAxios";
+import useSnackbarStore from "@/store/snackbarStore";
 import type { AreaType, UserInfo } from "@/types";
 
 const router = useRouter();
 const { params } = useRoute();
 const { _axios } = useHttp();
 const roomStore = useRoomStore();
+const snackbarStore = useSnackbarStore();
 const { bookingRoomData } = storeToRefs(roomStore);
 const { dateToChinese, dateFormat } = useHelper();
-const { blockList, fixedBlock, setBlockPosition, handleScroll } =
+const { userInfoRules } = useRules();
+const { blockList, fixedBlock, setBlockPosition, handleScroll, resizeHandler } =
   useFixedBlock();
 const userInfo = ref<UserInfo>({
   name: "",
@@ -172,6 +183,7 @@ const userInfo = ref<UserInfo>({
   },
 });
 const loading = ref(false);
+const successLoading = ref(false);
 const cityItems = computed(() => {
   return CityCountyData.map((item) => item.CityName);
 });
@@ -193,6 +205,46 @@ const totalPrice = computed(() => {
     return "-";
   }
 });
+
+const validateInfo = computed(() => {
+  return (
+    !userInfo.value.name ||
+    !userInfo.value.phone ||
+    !userInfo.value.email ||
+    !userInfo.value.address.city ||
+    !userInfo.value.address.county ||
+    !userInfo.value.address.detail
+  );
+});
+const validatePayload = () => {
+  let msg: string[] = [];
+  Object.keys(userInfoRules).forEach((key) => {
+    let userInfoKeys = ["name", "phone", "email"];
+    let addresskeys = ["city", "county", "detail"];
+    if (addresskeys.includes(key)) {
+      let res = userInfoRules[key](userInfo.value.address[key] as string);
+      if (res !== true) {
+        msg.push(res);
+      }
+    } else if (userInfoKeys.includes(key)) {
+      let res = userInfoRules[key](userInfo.value[key] as string);
+      if (res !== true) {
+        msg.push(res);
+      }
+    }
+  });
+  console.log({ msg });
+  if (msg.length > 0) {
+    snackbarStore.setSnackBar({
+      message: msg.join(", "),
+      color: "error",
+      isOpen: true,
+    });
+  } else {
+    confirmBooking();
+  }
+};
+
 const confirmBooking = async () => {
   let zipcode = countyItems.value.find(
     (item) => item?.AreaName === userInfo.value!.address.county
@@ -207,6 +259,7 @@ const confirmBooking = async () => {
   };
   // console.log({ payload });
   try {
+    loading.value = true;
     const res = await _axios.post("/orders", payload);
     console.log({ res });
     if (res.status) {
@@ -214,14 +267,16 @@ const confirmBooking = async () => {
       roomStore.bookingRoomData!.userInfo = res.data.data.userInfo;
       roomStore.bookingRoomData!.price = totalPrice.value;
       // console.log(roomStore.bookingRoomData);
-      loading.value = true;
+      successLoading.value = true;
       await setTimeout(() => {
-        loading.value = false;
+        successLoading.value = false;
         router.push({ name: "BookSucceed" });
       }, 2000);
     }
+    loading.value = false;
   } catch (err) {
     console.log(err);
+    loading.value = false;
   }
 };
 
@@ -233,10 +288,12 @@ onMounted(() => {
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
+  window.addEventListener("resize", resizeHandler);
   setBlockPosition(blockList.value!.offsetTop, blockList.value!.offsetLeft);
 });
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", resizeHandler);
 });
 </script>
 

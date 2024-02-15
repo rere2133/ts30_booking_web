@@ -23,16 +23,19 @@ export type RoomType = {
   updatedAt: string;
 }
 export type UserInfo = {
+  [key: string]: string | number | object;
   name: string;
   email: string;
   phone: string;
   address: {
+    [key: string]: number | string;
     zipcode: number;
     detail: string;
     county: string;
     city: string;
   };
 }
+export type Rule =(value: string) => boolean | string;
 
 export type bookingRoomData = {
   name: string;

@@ -17,7 +17,6 @@
         />
       </div>
     </div>
-
     <div class="container">
       <v-row>
         <v-col cols="12" md="8">
@@ -31,11 +30,11 @@
             {{ roomNotice }}
           </div>
         </v-col>
-        <v-col ref="bookingWrap" class="bookingWrap tw-w-[400px]">
-          <div ref="bookingList">
+        <v-col class="blockEle tw-w-[400px]">
+          <div ref="blockList">
             <RoomBookingList
               :roomInfo="roomStore.roomInfo"
-              :class="`bookingList ${fixedBookingList ? 'fixedBooking' : ''}`"
+              :class="`bookingList ${fixedBlock ? 'fixedBooking' : ''}`"
             />
           </div>
         </v-col>
@@ -45,58 +44,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import HomeContainer from "@/components/home/HomeContainer.vue";
 import RoomInfoZone from "@/components/rooms/RoomInfoZone.vue";
 import RoomBookingList from "@/components/rooms/RoomBookingList.vue";
 import { useHttp } from "@/plugins/httpAxios";
 import { roomNotice } from "@/utils/roomNotice";
-// import type { RoomType } from "@/types";
 import useRoomStore from "@/store/roomStore";
-import { useDisplay } from "vuetify";
+import { useFixedBlock } from "@/utils/useFixedBlock";
 
 const { _axios } = useHttp();
-const { name } = useDisplay();
 const router = useRouter();
 const { params } = useRoute();
 const roomStore = useRoomStore();
-const bookingList = ref<HTMLElement | null>(null);
-const bookingWrap = ref<HTMLElement | null>(null);
-const fixedBookingList = ref(false);
-const bookingPosition = ref({
-  offsetTop: 0,
-  offsetLeft: 0,
-});
-const handleScroll = () => {
-  if (
-    window.scrollY > bookingPosition.value!.offsetTop - 100 &&
-    name.value !== "xs" &&
-    name.value !== "sm"
-  ) {
-    fixedBookingList.value = true;
-    let width = getBookingWrapWidth();
-
-    bookingList.value?.style.setProperty(
-      "--bookingWrapWidth",
-      `${width - 24}px`
-    );
-    bookingList.value?.style.setProperty("--bookingWrapTop", `100px`);
-    bookingList.value?.style.setProperty(
-      "--bookingWrapLeft",
-      `${bookingPosition.value!.offsetLeft}px`
-    );
-  } else {
-    fixedBookingList.value = false;
-  }
-};
-const getBookingWrapWidth = (): number => {
-  const bookingWrap: HTMLElement | null =
-    document.querySelector(".bookingWrap");
-  if (bookingWrap === null) return 0;
-  const width = bookingWrap.getBoundingClientRect().width;
-  return width;
-};
+const { blockList, fixedBlock, setBlockPosition, handleScroll, resizeHandler } =
+  useFixedBlock();
 
 const getRooms = async () => {
   try {
@@ -104,7 +67,6 @@ const getRooms = async () => {
     console.log({ res });
     roomStore.roomInfo = res.data.data;
     if (roomStore.roomInfo) {
-      // roomInfo.value.layout = ["市景", "獨立衛浴", "客廳", "書房", "樓層電梯"];
       roomStore.roomInfo.layout = [
         {
           title: "市景",
@@ -136,15 +98,19 @@ onMounted(() => {
   getRooms();
 });
 
+// const resizeHandler = () => {
+//   setBlockPosition(blockList.value!.offsetTop, blockList.value!.offsetLeft);
+//   handleScroll();
+// };
+
 onMounted(() => {
   window.addEventListener("scroll", handleScroll);
-  bookingPosition.value = {
-    offsetTop: bookingList.value!.offsetTop,
-    offsetLeft: bookingList.value!.offsetLeft,
-  };
+  window.addEventListener("resize", resizeHandler);
+  setBlockPosition(blockList.value!.offsetTop, blockList.value!.offsetLeft);
 });
 onUnmounted(() => {
   window.removeEventListener("scroll", handleScroll);
+  window.removeEventListener("resize", resizeHandler);
 });
 </script>
 

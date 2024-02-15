@@ -16,6 +16,10 @@ export function useFixedBlock() {
         offsetLeft: left || blockPosition.value!.offsetLeft,
       };
     }
+    const resizeHandler = () => {
+      setBlockPosition(blockList.value!.offsetTop, blockList.value!.offsetLeft);
+      handleScroll();
+    };
     const handleScroll = () => {
       if (
         window.scrollY > blockPosition.value!.offsetTop - 100 &&
@@ -46,5 +50,5 @@ export function useFixedBlock() {
       return width;
     };
 
-    return { blockList,blockPosition,fixedBlock,setBlockPosition,handleScroll };
+    return { blockList,blockPosition,fixedBlock,setBlockPosition,resizeHandler,handleScroll };
 }

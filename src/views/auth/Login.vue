@@ -1,14 +1,14 @@
 <template>
-  <div class="tw-h-[90vh] tw-pt-10 lg:tw-pt-0 tw-flex">
+  <div class="tw-h-[90vh] tw-pt-10 sm:tw-pt-0 tw-flex">
     <div
-      class="tw-w-1/2 tw-bg-cover tw-bg-center tw-hidden lg:tw-block"
+      class="tw-w-1/2 tw-bg-cover tw-bg-center tw-hidden sm:tw-block"
       :style="`background-image: url(${getImageUrl('register.png')});`"
     ></div>
     <div
-      class="tw-w-full lg:tw-w-1/2 tw-flex tw-justify-center tw-items-center tw-px-4"
+      class="tw-w-full sm:tw-w-1/2 tw-flex tw-justify-center tw-items-center tw-px-4"
     >
       <form
-        class="tw-flex tw-flex-col tw-gap-5 lg:tw-w-1/2 tw-w-full"
+        class="tw-flex tw-flex-col tw-gap-5 sm:tw-w-1/2 sm:tw-min-w-[280px] tw-w-full"
         @submit.prevent="login"
       >
         <div class="tw-flex tw-flex-col tw-gap-2">
