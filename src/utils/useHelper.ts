@@ -1,6 +1,7 @@
 import { useDisplay } from "vuetify"
 import { img_host } from "@/utils/imageSource";
 import { computed } from "vue"
+const webLocation = location;
 export function useHelper(){
   const { name } = useDisplay()
   const webOrMobile = computed(()=>{
@@ -8,7 +9,7 @@ export function useHelper(){
     else return 'web'
   })
   const getImageUrl = (fileName:string):string=>{
-    return `./imgs/${img_host[webOrMobile.value]}/${fileName}`
+    return `${webLocation.origin}/ts30_booking_web/imgs/${img_host[webOrMobile.value]}/${fileName}`
   }
   const dateFormat = (date:Date|undefined):string=>{
     if(!date) return ''

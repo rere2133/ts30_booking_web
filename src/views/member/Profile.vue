@@ -120,6 +120,8 @@
               <input
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40"
                 v-model="email"
+                autoComplete="false"
+                disabled
               />
             </div>
             <div class="tw-flex tw-items-center">
@@ -133,7 +135,13 @@
                   class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40"
                   type="password"
                   v-model="oldPassword"
+                  autoComplete="false"
                 />
+                <div
+                  class="tw-mt-[4px] tw-text-error-120 tw-text-tiny" v-show="validateObj.oldPassword.status == false"
+                >
+                  {{ validateObj.oldPassword.msg }}
+                </div>
               </div>
             </div>
             <div class="tw-flex tw-items-center">
@@ -147,7 +155,13 @@
                   class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40"
                   type="password"
                   v-model="newPassword"
+                  autoComplete="false"
                 />
+                <div
+                  class="tw-mt-[4px] tw-text-error-120 tw-text-tiny" v-show="validateObj.newPassword.status == false"
+                >
+                  {{ validateObj.newPassword.msg }}
+                </div>
               </div>
             </div>
             <div class="tw-flex tw-items-center">
@@ -161,13 +175,19 @@
                   class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40"
                   type="password"
                   v-model="reNewPassword"
+                  autoComplete="false"
                 />
+                <div
+                  class="tw-mt-[4px] tw-text-error-120 tw-text-tiny" v-show="validateObj.reNewPassword.status == false"
+                >
+                  {{ validateObj.reNewPassword.msg }}
+                </div>
               </div>
             </div>
             <button
               type="button"
               class="tw-py-[16px] tw-mt-[24px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100"
-              @click="orderMode = 'show'"
+              @click="updateUserInfo()"
             >
               儲存設定
             </button>
@@ -190,6 +210,11 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40"
                 v-model="name"
               />
+              <div
+                  class="tw-mt-[4px] tw-text-error-120 tw-text-tiny" v-show="validateObj.name.status == false"
+                >
+                  {{ validateObj.name.msg }}
+                </div>
             </div>
             <div class="tw-mb-[24px]">
               <p
@@ -201,6 +226,11 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40"
                 v-model="phone"
               />
+              <div
+                  class="tw-mt-[4px] tw-text-error-120 tw-text-tiny" v-show="validateObj.phone.status == false"
+                >
+                  {{ validateObj.phone.msg }}
+                </div>
             </div>
             <div class="tw-mb-[24px]">
               <p
@@ -285,11 +315,16 @@
                 class="tw-p-4 tw-bg-white tw-text-gray-600 tw-w-full tw-rounded tw-border-solid tw-border-[1px] tw-border-black-40"
                 v-model="addressDetail"
               />
+              <div
+                  class="tw-mt-[4px] tw-text-error-120 tw-text-tiny" v-show="validateObj.addressDetail.status == false"
+                >
+                  {{ validateObj.addressDetail.msg }}
+                </div>
             </div>
             <button
               type="button"
               class="tw-py-[16px] tw-px-[32px] tw-border-primary-100 tw-border-[1px] tw-border-solid tw-rounded-[8px] tw-text-primary-100"
-              @click="orderMode = 'show'"
+              @click="updateUserInfo()"
             >
               儲存設定
             </button>
@@ -305,8 +340,43 @@ import { ref, onMounted } from "vue";
 import { useHttp } from "@/plugins/httpAxios";
 import MemberCard from "@/components/member/Card.vue";
 import { CityCountyData } from "@/utils/CityCountyData";
+import useSnackbarStore from '@/store/snackbarStore';
+let snackbarStore = useSnackbarStore();
+let {setSnackBar} = snackbarStore;
 const { _axios } = useHttp();
-const userInfo = ref<any>(null);
+type validateFormItem = {
+  status: boolean;
+  msg: string | null;
+};
+enum validateName {
+  oldPassword = 'oldPassword',
+  newPassword = 'newPassword',
+  reNewPassword = 'reNewPassword',
+  name = 'name',
+  phone = 'phone',
+  addressDetail = 'addressDetail'
+}
+type validateForm = {
+  oldPassword: validateFormItem;
+  newPassword: validateFormItem;
+  reNewPassword: validateFormItem;
+  name: validateFormItem;
+  phone: validateFormItem;
+  addressDetail: validateFormItem;
+};
+const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
+const userInfo = ref<{
+  address: {
+      zipcode: number;
+      detail: string;
+      county: string;
+      city: string;
+    };
+    birthday: string;
+    name: string;
+    email: string;
+    phone: string;
+} | null>(null);
 const orderMode = ref("show");
 type userInfo = {
   userInfo: {
@@ -321,28 +391,34 @@ type userInfo = {
     phone: string;
   };
 };
-onMounted(() => {
+const getUserData = () => {
   _axios.get(`/user`).then((res) => {
     userInfo.value = res.data.data;
-    let birthdaySource = userInfo.value.birthday.split("T")[0].split("-");
-    userInfo.value.birthday = `${birthdaySource[0]} 年 ${birthdaySource[1]} 月 ${birthdaySource[2]} 日`;
-    name.value = userInfo.value.name;
-    phone.value = userInfo.value.phone;
-    year.value = birthdaySource[0];
-    month.value = birthdaySource[1];
-    if (Number(month.value) < 10) {
-      month.value = month.value.replace("0", "");
+    if (userInfo.value) {
+      let birthdaySource = userInfo.value.birthday.split("T")[0].split("-");
+      userInfo.value.birthday = `${birthdaySource[0]} 年 ${birthdaySource[1]} 月 ${birthdaySource[2]} 日`;
+      email.value = userInfo.value.email;
+      name.value = userInfo.value.name;
+      phone.value = userInfo.value.phone;
+      year.value = birthdaySource[0];
+      month.value = birthdaySource[1];
+      if (Number(month.value) < 10) {
+        month.value = month.value.replace("0", "");
+      }
+      reSetDates();
+      date.value = birthdaySource[2];
+      if (Number(date.value) < 10) {
+        date.value = date.value.replace("0", "");
+      }
+      city.value = userInfo.value.address.city;
+      reloadTownList();
+      town.value = String(userInfo.value.address.zipcode);
+      addressDetail.value = userInfo.value.address.detail;
     }
-    reSetDates();
-    date.value = birthdaySource[2];
-    if (Number(date.value) < 10) {
-      date.value = date.value.replace("0", "");
-    }
-    city.value = userInfo.value.address.city;
-    reloadTownList();
-    town.value = String(userInfo.value.address.zipcode);
-    addressDetail.value = userInfo.value.address.detail;
   });
+}
+onMounted(() => {
+  getUserData();
 });
 
 const changeMode = (mode: string) => {
@@ -397,6 +473,145 @@ const reloadTownList = () => {
     });
   });
   town.value = townList.value[0].zipCode;
+};
+const validateObj = ref<validateForm>({
+  oldPassword: {
+    status: true,
+    msg: null
+  },
+  newPassword: {
+    status: true,
+    msg: null
+  },
+  reNewPassword: {
+    status: true,
+    msg: null
+  },
+  name: {
+    status: true,
+    msg: null
+  },
+  phone: {
+    status: true,
+    msg: null
+  },
+  addressDetail: {
+    status: true,
+    msg: null
+  }
+});
+const updateUserInfo = async () => {
+  let validateFormItem: {
+    item: string;
+    name: validateName;
+    rull: string[];
+  }[] = [
+    {
+      item: oldPassword.value,
+      name: validateName.oldPassword,
+      rull: ['empty', 'password']
+    },
+    {
+      item: newPassword.value,
+      name: validateName.newPassword,
+      rull: ['empty', 'password']
+    },
+    {
+      item: reNewPassword.value,
+      name: validateName.reNewPassword,
+      rull: ['empty', 'password', 'checkPassword']
+    },
+    {
+      item: name.value,
+      name: validateName.name,
+      rull: ['empty']
+    },
+    {
+      item: phone.value,
+      name: validateName.phone,
+      rull: ['empty']
+    },
+    {
+      item: addressDetail.value,
+      name: validateName.addressDetail,
+      rull: ['empty']
+    }
+  ];
+  let tempValidateResult = { ...validateObj.value };
+  let canUpdateInfo: boolean = true;
+  validateFormItem.forEach(formItem => {
+    validateObj.value[formItem.name].status = true;
+    formItem.rull.some(rullItem => {
+      switch (rullItem) {
+        case 'empty': {
+          if (formItem.item == null || formItem.item.length == 0) {
+            tempValidateResult[formItem.name].status = false;
+            tempValidateResult[formItem.name].msg = '此欄位請勿為空';
+            canUpdateInfo = false;
+            return true;
+          }
+          return false;
+        }
+        case 'password': {
+          let regStatus = passwordRegex.test(formItem.item);
+          if (regStatus == false) {
+            tempValidateResult[formItem.name].status = false;
+            tempValidateResult[formItem.name].msg = '密碼應在 8 到 16 個字，包含英文和數字';
+            canUpdateInfo = false;
+            return true;
+          }
+          return false;
+        }
+        case 'checkPassword': {
+          if (newPassword.value != reNewPassword.value) {
+            tempValidateResult.reNewPassword.status = false;
+            tempValidateResult.reNewPassword.msg = '請確認輸入的密碼';
+            canUpdateInfo = false;
+            return true;
+          }
+          return false;
+        }
+      }
+    });
+  });
+  validateObj.value = tempValidateResult;
+  const selectedTownItem = townList.value.find(item => item.zipCode === town.value);
+  const selectedAreaName = selectedTownItem ? selectedTownItem.areaName : '';
+  if (canUpdateInfo) {
+    let updateInfo = {
+      name: name.value,
+      phone: phone.value,
+      birthday: `${year.value}-${month.value}-${date.value}`,
+      address: {
+        zipcode: parseInt(town.value),
+        detail: addressDetail.value,
+        county: selectedAreaName,
+        city: city.value
+      },
+      oldPassword: oldPassword.value,
+      newPassword: newPassword.value
+    };
+    _axios.put('/user', updateInfo)
+    .then(_ => {
+      getUserData();
+      orderMode.value = 'show';
+      oldPassword.value = '';
+      newPassword.value = '';
+      reNewPassword.value = '';
+    })
+    .catch(error => {
+      // Handle error
+      setSnackBar({
+        color: 'red',
+        message: error.response.data.message,
+        isOpen: true
+      })
+      console.error('Error updating user:', error);
+    });
+    
+  } else {
+    return false;
+  }
 };
 </script>
 
