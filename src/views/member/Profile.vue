@@ -364,7 +364,7 @@ type validateForm = {
   phone: validateFormItem;
   addressDetail: validateFormItem;
 };
-const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/;
+const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{4,}$/;
 const userInfo = ref<{
   address: {
       zipcode: number;
@@ -556,7 +556,7 @@ const updateUserInfo = async () => {
           let regStatus = passwordRegex.test(formItem.item);
           if (regStatus == false) {
             tempValidateResult[formItem.name].status = false;
-            tempValidateResult[formItem.name].msg = '密碼應在 8 到 16 個字，包含英文和數字';
+            tempValidateResult[formItem.name].msg = '密碼最少需 4 個字，包含英文和數字';
             canUpdateInfo = false;
             return true;
           }
