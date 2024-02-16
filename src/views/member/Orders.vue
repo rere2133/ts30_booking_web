@@ -1,136 +1,145 @@
 <template>
   <div class="member-profile tw-px-[24px]">
-    <div class="md:tw-flex tw-mx-[-24px]" v-if="roomList.length > 0">
+    <div class="md:tw-flex tw-mx-[-24px]">
       <div class="tw-mb-[20px] md:tw-mb-0 tw-flex-[6] tw-mx-[40px]">
         <member-card class="tw-text-black-100">
-          <div class="tw-text-body tw-mb-[8px]">
-            預定參考編號：{{ roomList[0].roomInfo._id }}
-          </div>
-          <div class="tw-text-h5 tw-mb-[24px]">即將來的行程</div>
-          <img
-            class="tw-w-full tw-rounded-[10px] tw-h-[200px] tw-object-center tw-object-cover"
-            :src="roomList[0].roomInfo.imageUrl"
-          />
-          <div class="tw-my-[24px]">
-            <span
-              class="tw-text-h6 tw-pr-[8px] tw-mr-[8px] tw-border-r-[1px] tw-border-r-solid tw-border-r-black-60"
-            >
-              {{ roomList[0].roomInfo.name }}，{{ roomList[0].day }} 晚
-            </span>
-            <span className="tw-text-h6"
-              >住宿人數：{{ roomList[0].peopleNum }} 位</span
-            >
-          </div>
-          <div className="start-date">
-            {{
-              dateFormat(
-                new Date(roomList[0].checkInDate.split("T")[0]).getTime()
-              )
-            }}，15:00 可入住
-          </div>
-          <div className="end-date">
-            {{
-              dateFormat(
-                new Date(roomList[0].checkOutDate.split("T")[0]).getTime()
-              )
-            }}
-            ，12:00 前退房
-          </div>
-          <div class="tw-text-body tw-mt-[24px]">
-            <span>NT$ </span>
-            {{
-              (Number(roomList[0].roomInfo.price) * Number(roomList[0].day))
-                .toLocaleString(undefined, {
-                  style: "currency",
-                  currency: "NTD",
-                  maximumFractionDigits: 0,
-                })
-                .replace("NTD", "")
-            }}
-          </div>
-          <hr class="gb-divider tw-bg-black-40 tw-my-10" />
-          <Order :roomInfo="roomList[0].roomInfo" />
-          <div class="tw-flex tw-mx-[-8px] tw-mt-[24px]">
-            <v-btn
-              color="primary"
-              variant="outlined"
-              class="tw-mx-[8px] tw-flex-1"
-              @click="openCancelDialog"
-              >取消預定</v-btn
-            >
-            <v-btn
-              color="primary"
-              class="tw-mx-[8px] tw-flex-1"
-              @click="toRoomInfo"
-              >查看詳情</v-btn
-            >
-          </div>
+          <template v-if="readyRoomList.length > 0">
+            <div class="tw-text-body tw-mb-[8px]">
+              預定參考編號：{{ roomList[0].roomInfo._id }}
+            </div>
+            <div class="tw-text-h5 tw-mb-[24px]">即將來的行程</div>
+            <img
+              class="tw-w-full tw-rounded-[10px] tw-h-[200px] tw-object-center tw-object-cover"
+              :src="roomList[0].roomInfo.imageUrl"
+            />
+            <div class="tw-my-[24px]">
+              <span
+                class="tw-text-h6 tw-pr-[8px] tw-mr-[8px] tw-border-r-[1px] tw-border-r-solid tw-border-r-black-60"
+              >
+                {{ roomList[0].roomInfo.name }}，{{ roomList[0].day }} 晚
+              </span>
+              <span className="tw-text-h6"
+                >住宿人數：{{ roomList[0].peopleNum }} 位</span
+              >
+            </div>
+            <div className="start-date">
+              {{
+                dateFormat(
+                  new Date(roomList[0].checkInDate.split("T")[0]).getTime()
+                )
+              }}，15:00 可入住
+            </div>
+            <div className="end-date">
+              {{
+                dateFormat(
+                  new Date(roomList[0].checkOutDate.split("T")[0]).getTime()
+                )
+              }}
+              ，12:00 前退房
+            </div>
+            <div class="tw-text-body tw-mt-[24px]">
+              <span>NT$ </span>
+              {{
+                (Number(roomList[0].roomInfo.price) * Number(roomList[0].day))
+                  .toLocaleString(undefined, {
+                    style: "currency",
+                    currency: "NTD",
+                    maximumFractionDigits: 0,
+                  })
+                  .replace("NTD", "")
+              }}
+            </div>
+            <hr class="gb-divider tw-bg-black-40 tw-my-10" />
+            <Order :roomInfo="roomList[0].roomInfo" />
+            <div class="tw-flex tw-mx-[-8px] tw-mt-[24px]">
+              <v-btn
+                color="primary"
+                variant="outlined"
+                class="tw-mx-[8px] tw-flex-1"
+                @click="openCancelDialog"
+                >取消預定</v-btn
+              >
+              <v-btn
+                color="primary"
+                class="tw-mx-[8px] tw-flex-1"
+                @click="toRoomInfo"
+                >查看詳情</v-btn
+              >
+            </div>
+          </template>
+          <template v-else>
+            <div class="tw-text-title">暫無即將到來訂單</div>
+          </template>
         </member-card>
       </div>
       <div class="tw-flex-[6] tw-mx-[40px]">
         <member-card class="tw-text-black-100">
-          <div class="tw-text-h5 tw-mb-[24px]">歷史訂單</div>
-          <div
-            v-for="(item, idx) in displayRoomList"
-            :key="`history_${item._id}`"
-          >
-            <div class="tw-flex tw-gap-4">
-              <img
-                class="tw-flex-0 tw-mr-[8px] tw-rounded-[5px] tw-object-center tw-object-cover tw-max-h-[80px]"
-                :src="item.roomInfo.imageUrl"
-                width="120px"
-                height="80px"
-              />
-              <div class="history-item-info tw-text-black-80">
-                <div class="tw-text-body tw-mb-[8px]">
-                  預定參考編號：#{{ item._id }}
-                </div>
-                <div class="tw-text-h6 tw-my-4">{{ item.roomInfo.name }}</div>
-                <div class="tw-text-body tw-mb-2">
-                  住宿天數：{{ item.day }} 晚
-                </div>
-                <div class="tw-text-body tw-mb-4">
-                  住宿人數：{{ item.peopleNum }} 位
-                </div>
-                <div class="start-date">
-                  入住：{{ dateFormat(new Date(item.checkInDate).getTime()) }}
-                </div>
-                <div class="end-date">
-                  退房：{{ dateFormat(new Date(item.checkOutDate).getTime()) }}
-                </div>
-                <div class="tw-text-body tw-mt-[16px]">
-                  <span>NT$ </span>
-                  {{
-                    (Number(item.roomInfo.price) * Number(item.day))
-                      .toLocaleString(undefined, {
-                        style: "currency",
-                        currency: "NTD",
-                        maximumFractionDigits: 0,
-                      })
-                      .replace("NTD", "")
-                  }}
+          <template v-if="historyRoomList.length > 0">
+            <div class="tw-text-h5 tw-mb-[24px]">歷史訂單</div>
+            <div
+              v-for="(item, idx) in displayRoomList"
+              :key="`history_${item._id}`"
+            >
+              <div class="tw-flex tw-gap-4">
+                <img
+                  class="tw-flex-0 tw-mr-[8px] tw-rounded-[5px] tw-object-center tw-object-cover tw-max-h-[80px]"
+                  :src="item.roomInfo.imageUrl"
+                  width="120px"
+                  height="80px"
+                />
+                <div class="history-item-info tw-text-black-80">
+                  <div class="tw-text-body tw-mb-[8px]">
+                    預定參考編號：#{{ item._id }}
+                  </div>
+                  <div class="tw-text-h6 tw-my-4">{{ item.roomInfo.name }}</div>
+                  <div class="tw-text-body tw-mb-2">
+                    住宿天數：{{ item.day }} 晚
+                  </div>
+                  <div class="tw-text-body tw-mb-4">
+                    住宿人數：{{ item.peopleNum }} 位
+                  </div>
+                  <div class="start-date">
+                    入住：{{ dateFormat(new Date(item.checkInDate).getTime()) }}
+                  </div>
+                  <div class="end-date">
+                    退房：{{ dateFormat(new Date(item.checkOutDate).getTime()) }}
+                  </div>
+                  <div class="tw-text-body tw-mt-[16px]">
+                    <span>NT$ </span>
+                    {{
+                      (Number(item.roomInfo.price) * Number(item.day))
+                        .toLocaleString(undefined, {
+                          style: "currency",
+                          currency: "NTD",
+                          maximumFractionDigits: 0,
+                        })
+                        .replace("NTD", "")
+                    }}
+                  </div>
                 </div>
               </div>
+              <hr
+                v-if="idx != displayRoomList.length - 1"
+                class="gb-divider tw-bg-black-40 tw-my-8"
+              />
             </div>
-            <hr
-              v-if="idx != displayRoomList.length - 1"
-              class="gb-divider tw-bg-black-40 tw-my-8"
-            />
-          </div>
-          <v-btn
-            v-if="!showMore && roomList.length > 3"
-            @click="showMore = true"
-            variant="outlined"
-            color="primary"
-            class="tw-mt-10"
-            block
-            >查看更多
-            <v-icon icon="mdi-chevron-down"></v-icon>
-          </v-btn>
+            <v-btn
+              v-if="!showMore && roomList.length > 3"
+              @click="showMore = true"
+              variant="outlined"
+              color="primary"
+              class="tw-mt-10"
+              block
+              >查看更多
+              <v-icon icon="mdi-chevron-down"></v-icon>
+            </v-btn>
+          </template>
+          <template v-else>
+            <div class="tw-text-title">暫無歷史訂單</div>
+          </template>
         </member-card>
       </div>
     </div>
-    <div class="tw-text-h4" v-else>目前尚無訂單</div>
     <v-dialog v-model="isCancelDialogOpen">
       <v-card class="tw-w-[600px] tw-mx-[auto]">
         <div class="tw-p-[10px] tw-text-right">
@@ -238,10 +247,12 @@ import Order from "@/components/member/Order/Order.vue";
 import router from "@/plugins/router";
 const { _axios } = useHttp();
 const roomList = ref<mixinOrderInfo[]>([]);
+const readyRoomList = ref<mixinOrderInfo[]>([]);
+const historyRoomList = ref<mixinOrderInfo[]>([]);
 const showMore = ref(false);
 
 const displayRoomList = computed(() => {
-  return showMore.value ? roomList.value : roomList.value.slice(0, 3);
+  return showMore.value ? historyRoomList.value : historyRoomList.value.slice(0, 3);
 });
 const dateToString = (timestamp: number) => {
   let date = new Date(timestamp);
@@ -294,6 +305,8 @@ const getOrders = () => {
             1000
         );
         roomList.value.push(tempObject);
+        historyRoomList.value = roomList.value.filter(item => item.status != 1);
+        readyRoomList.value = roomList.value.filter(item => item.status == 1);
       });
     });
   });
@@ -306,13 +319,13 @@ const openCancelDialog = () => {
   isCancelDialogOpen.value = true;
 };
 const removeOrder = () => {
-  _axios.delete(`orders/${roomList.value[0]._id}`).then(() => {
+  _axios.delete(`orders/${readyRoomList.value[0]._id}`).then(() => {
     getOrders();
     isCancelDialogOpen.value = false;
   });
 };
 const toRoomInfo = () => {
-  router.push(`/roomDetail/${roomList.value[0].roomInfo._id}`);
+  router.push(`/roomDetail/${readyRoomList.value[0].roomInfo._id}`);
 };
 </script>
 <style scoped lang="scss">
