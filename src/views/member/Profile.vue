@@ -364,7 +364,7 @@ type validateForm = {
   phone: validateFormItem;
   addressDetail: validateFormItem;
 };
-const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{4,}$/;
+const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d).{4,}$/;
 const userInfo = ref<{
   address: {
       zipcode: number;
